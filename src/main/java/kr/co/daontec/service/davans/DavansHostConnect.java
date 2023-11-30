@@ -25,7 +25,7 @@ public class DavansHostConnect {
     private final ByteBuffer buffer = ByteBuffer.allocate(9999);
 
     @Async
-    public void sendData(Object reqBody, boolean result,String devId) throws IOException {
+    public void sendData(Object reqBody, boolean result, String devId) throws IOException {
 
         Socket socket = new Socket(host, 8801);
         socket.setSoTimeout(6000);
