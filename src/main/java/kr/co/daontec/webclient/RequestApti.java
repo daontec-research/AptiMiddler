@@ -102,7 +102,9 @@ public class RequestApti {
 
         log.info("아파트아이 출차전송결과 : {}", Objects.requireNonNull(carInOutRes).getMessage());
         davansHostConnect.sendData(m906, carInOutRes.getResultCode().equals("00"), deviceId);
-        loadImage(m906.getImgPathExit());
+        if (!m906.getImgPathExit().equals("")) {
+            loadImage(m906.getImgPathExit());
+        }
     }
 
     public void loadImage(String url) throws IOException {
@@ -116,14 +118,14 @@ public class RequestApti {
         byte[] imageBytes = downloadImage(url);
         String imageString = new String(imageBytes, StandardCharsets.UTF_8);
 
-        sendImage(fileName,imageString);
+        sendImage(fileName, imageString);
     }
 
-    public void sendImage(String fileName, String binary){
+    public void sendImage(String fileName, String binary) {
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("fileName",fileName);
-        map.add("file",binary);
+        map.add("fileName", fileName);
+        map.add("file", binary);
         map.add("aptCode", data.getAptiCode());
 
         Object object = webClient.post()
@@ -140,8 +142,8 @@ public class RequestApti {
                 .retry(3)
                 .block();
 
-        Map<String,String> resMap = (Map<String, String>) object;
-        log.info("아파트아이 차번이미지전송결과 : {}",resMap.get("message"));
+        Map<String, String> resMap = (Map<String, String>) object;
+        log.info("아파트아이 차번이미지전송결과 : {}", resMap.get("message"));
     }
 
     private static byte[] downloadImage(String imageUrl) throws IOException {
