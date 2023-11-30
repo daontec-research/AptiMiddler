@@ -1,0 +1,639 @@
+syntax = "proto3";
+
+package davans;
+
+option java_package = "kr.co.daontec.dto.proto";
+// 공통부분
+message pb_header_req{
+	string ver = 1;				// 패킷버전	ex) 1.0
+}
+
+message pb_header_res{
+	string result_cd = 1;		// 응답 코드	ex) 00: 정상, 99: 기타오류, ...
+	string result_msg = 2;		// 응답 메시지	ex) 정상, DB오류, 패킷오류, ...
+}
+
+message pb_c_code_l{
+	string group_cd = 1;		// 대분류 코드
+	string common_cd = 2;		// 공통 코드
+	string cd_nm = 3;			// 코드 명
+	string cd_ds = 4;			// 화면 표시 문구(향후 언어 지원 시 분리해서 응답)
+}
+
+message pb_device_l{
+	string target_device_id = 1;	// 관리 장비ID
+	string target_device_nm = 2;	// 관리 장비이름
+	string device_ty_cd = 3;	// 장비 종류코드 ex)PM03 01(입구), 02(출구), 03(유인정산), 04(무인정산),...
+	int32 x_position = 4;		// x좌표
+	int32 y_position = 5;		// y좌표
+	int32 width = 6;			// 가로
+	int32 height = 7;			// 세로
+	string display_yn = 8;		// 화면표시 여부
+	
+	string printer_yn = 11;		// 방문증(입차증) 사용여부
+	
+	string device_ip = 21;		// 장비 IP
+	int32 device_port = 22;		// 장비 port
+}
+
+message pb_c_power_controller_l{
+	int32  controller_id	= 11;	// 제어기 ID
+	string target_device_id = 1;	// 관리 장비ID
+//	string controller_ip = 3;	// 제어기 IP
+	string controller_ch = 4;	// 제어기 채널
+	string controller_ds = 5;	// 제어기 표시 문구
+	string use_yn = 6;			// 사용 여부
+}
+
+message pb_car_l{
+	string parking_sn = 1;		// 주차일련번호
+	string car_no = 2;			// 차량번호
+	string in_dtm = 3;			// 입차일시
+	string location = 4;		// 주차 위치 구역>층>주차면
+	string img_path_entry = 5;	// 이미지 경로
+}
+
+message pb_pattern_l{
+	string park_id = 21;		// 고유ID
+	string local_id = 22;		// 로컬ID
+	int32  pattern_id = 11;		// 패턴ID(key)
+	
+	string car_no = 1;			// 차량번호
+	string pattern_no = 2;		// 패턴번호(오인식 되는 번호)
+	string memo = 3;			// 메모
+	string use_yn = 4;			// 사용여부
+
+	string reg_nm = 5;			// 등록자명
+	string reg_dtm = 6;			// 등록 일시	YYYY-MM-DD hh:mm:ss
+}
+
+message pb_car_detail_l{
+	string parking_sn = 1;		// 주차일련번호
+	string car_no = 2;			// 차량번호
+	string cust_cd = 4;			// 고객구분코드
+	string in_dtm = 5;			// 입차일시
+	string out_dtm = 6;			// 출차일시
+	string car_status_cd = 7;	// 주차상태코드 ex)PP04
+
+//	string cust_ty = 11;		// 고객구분 string<전광판표시>
+	string household_info_1 = 12;	// 세대정보1(동)
+	string household_info_2 = 13;	// 세대정보2(호)
+	string ho_index = 41;			// 세대정보3(호index)
+	int32 parking_tm = 14;		// 주차시간(분)
+	string in_device_nm = 15;	// 입구 명
+	string out_device_nm = 16;	// 출구 명
+//	string location = 17;		// 주차 위치 구역>층>주차면
+	string img_path_entry = 18;	// 입차 이미지 경로
+	string img_path_exit = 19;	// 출차 이미지 경로	
+	
+	string zone_id = 21;		// 구역ID
+	string memo = 31;			// 메모(입출차 허용 사유)
+}
+
+message pb_car_unprocessed_l{
+	string parking_sn = 1;		// 주차일련번호
+	string car_no = 2;			// 차량번호
+	string cust_cd = 4;			// 고객구분코드
+	string event_dtm = 5;		// 발생일시
+
+//	int32 parking_tm = 14;		// 주차시간(분)
+	string device_nm = 15;		// 장비 명
+	string img_path = 18;		// 이미지 경로
+	
+	string zone_id = 21;		// 구역ID
+	
+	string msg = 31;			// 미처리 사유
+}
+
+message pb_parkable_cnt_l{
+	string zone_nm = 1;			// 구역이름
+	int32 total_cnt = 2;		// 총 주차면
+	int32 parkable_cnt = 3;		// 주차가능대수
+	int32 parked_cnt = 4;		// 주차중
+}
+
+message pb_rgst_l{
+	string park_id = 1;			// 고유 ID
+	string local_id = 2;		// 로컬 ID
+	int32  rgst_id = 3;			// 등록차량 ID
+	string sale_dt = 4;			// 등록 일자
+	string cust_nm = 5;			// 고객 명
+	string car_no = 6;			// 차량 번호
+	string tel_no = 7;			// 전화 번호
+	string mobile_no = 8;		// 휴대폰 번호
+	string car_nm = 9;			// 차량 모델 명
+	string rgst_status_cd = 10;	// 등록 상태 코드
+	string rgst_cust_cd = 11;	// 등록 고객 코드
+	string rf_tag_id = 12;		// RF ID
+	string address = 13;		// 주소
+	string household_info_1 = 14;	// 동
+	string household_info_2 = 15;	// 호
+	string ho_index = 16;			// 세대정보3(호index)
+	
+	string homenoti_yn = 20;	// 세대통보 여부
+	string start_dt = 21; 		// 시작 일자
+	string end_dt = 22; 		// 종료 일자
+	string park_able_zone = 23; // 주차가능 구역
+	string available_days = 24;	// 사용 가능일 (일월화수목금토공 YYYYYYYY)
+	string memo = 25; 			// 메모
+	
+	string reg_nm = 31;			// 등록자명
+	string reg_dtm = 32;		// 등록 일시
+//	string cancel_dt = 33;		// 취소 일시
+//	string cancel_device_nm = 34; // 취소 장비 ID
+//	string cancel_reg_nm = 35;	// 취소자명
+//	string cancel_reg_dtm = 36;	// 취소 일시
+
+	string car_size = 41;		// 차량 규격 PP03 01(일반), 02(경차), 03(대형)
+	string car_type = 42;		// 챠랑 종류 PP05 01(일반), 02(전기차), 03(테슬라)
+	string disable_yn = 43;		// 장애인 여부
+	
+	string no_driving_exception_yn = 51;	// 부제 예외 여부 ex)'Y'인 경우 부제위반 날짜라 하더라도 통과 / default 'N'설정
+}
+
+message pb_rgst_rf_l{
+	string park_id = 1;			// 고유 ID
+	string local_id = 2;		// 로컬 ID
+	int32  rgst_id = 3;			// 등록차량 ID
+	string rf_tag_id = 4;		// RF 태그 ID
+	string tag_serial_no = 5;	// 태그 원번호
+	string tag_state_cd = 6;	// 태그 상태 코드 ex) PR02 01(미등록), 02(정상등록), 03(분실), 04(폐기)
+	string memo = 7;			// 메모
+	string reg_nm = 8;			// 등록자명
+	string reg_dtm = 9;			// 등록 일시
+}
+
+message pb_park_l{
+	string park_id = 1;			// 고유ID
+	string local_id = 2;		// 로컬ID
+	string park_nm = 3;			// 주차장 명
+	string cctv_id = 4;			// CCTV ID
+	string cctv_password = 5;	// CCTV password
+}
+
+message pb_zone_l{
+	string zone_id = 1;			// 구역ID
+	string zone_nm = 2;			// 구역 명
+}
+
+message pb_car_info{
+	string parking_sn = 1;		// 주차일련번호
+	string cust_cd = 2;			// 고객구분코드	ex)PP01
+	string cust_ty = 3;			// 고객구분 string<전광판표시>
+	string car_no= 4;			// 차량번호
+	string in_dtm = 5;			// 입차일시  YYYY-MM-DD hh:mm:ss
+	int32 parking_tm = 6;		// 주차시간(분)
+	string in_device_nm = 7;	// 입구 명
+	string out_device_nm = 8;	// 출구 명
+//	string location = 9;		// 주차 위치 구역>층>주차면
+	string img_path_entry = 10;	// 입차 이미지 경로
+	string img_path_back = 11;	// 입차 후면 이미지 경로
+	string img_path_exit = 12;	// 출차 이미지 경로	
+}
+
+message pb_userset_l{
+	string park_id = 21;		// 고유ID
+	string local_id = 22;		// 로컬ID
+
+	string user_id = 1;			// 사용자ID
+	string user_nm = 2;			// 사용자 명
+//	string password = 3;		// 비밀번호(조회 시 빈값)
+	string password_end_dt = 4;	// 비밀번호 종료일자
+	string level_cd = 6;		// 권한 코드 ex) PC04 01(시스템관리자), 02(일반관리자), 03(사용자)
+	string hold_cd = 7;			// 근무 코드 ex) PM02 01(재직), 02(업무중지), 03(퇴직)
+	string first_run = 11;		// 최초실행 여부
+	string available_zone = 31;	// 사용가능 구역 (시스템 관리자는 무시됨, 일반관리자와 사용자는 조회 및 등록가능 구역이 제한됨)
+	string reg_nm = 8;			// 등록자명
+	string reg_dtm = 9;			// 등록 일시	YYYY-MM-DD hh:mm:ss
+}
+
+message pb_parkset_l{
+	string park_id = 21;		// 고유ID
+	string local_id = 22;		// 로컬ID
+
+	string project_id = 1;		// 프로젝트ID
+	string park_nm = 2;			// 주차장 명
+	string company_nm = 3;		// 운영회사명
+	string owner_nm = 4;		// 대표자명
+	string license_no = 5;		// 사업자등록번호
+	string park_address = 6;	// 주소
+	string latitude = 7;		// 위도
+	string longitude = 8;		// 경도
+	string tel_no = 9;			// 전화번호
+	string fax_no = 10;			// 팩스번호
+	int32 gate_opened_base_tm = 31;	// 수동스위치 사용 시 유효데이터 기준시간
+	string base_lang_cd = 11;	// 기본 언어 코드
+	string img_prefix = 12;		// 이미지 경로 prefix
+	string household_info_suffix_1 = 13;	// 세대정보 접미사1 ex)동
+	string household_info_suffix_2 = 14;	// 세대정보 접미사2 ex)호
+	string ho_index_suffix = 17;			// 세대정보3 접미사(호_index)
+	string reg_nm = 15;			// 등록자명
+	string reg_dtm = 16;		// 등록 일시	YYYY-MM-DD hh:mm:ss
+	
+	int32 history_ret_period = 41;	// 과거데이터 보존 기간(월)
+	int32 entry_ret_period = 42;	// 미출차 데이터 정리 기준일(day)
+	string commit_reason_yn = 51;	// 입차허용, 출차허용 시 사유 사용여부
+	
+//	string visit_reserve_limit_ty = 52;	// 방문예약 제한 종류(N: 제한없음, C: 횟수, T: 시간(마일리지)) // 기본값 N
+//	int32 visit_reserve_limit_cnt = 53;	// 방문예약 횟수 제한 시 허용 횟수
+//	int32 visit_reserve_limit_tm = 54;	// 방문예약 시간 제한 시 허용 시간(분)
+//	string free_use_start_tm = 61;	// 방문 마일리지 사용 제외 시작시각(hhmm)
+//	string free_use_end_tm = 62;	// 방문 마일리지 사용 제외 종료시각(hhmm)
+
+	string printer_title = 63;		// 방문증(입차증) 제목 (최상단 큰글씨)
+	string printer_title_size = 64;	// 방문증(입차증) 제목 크기(S: 작은글씨, L: 큰글씨) // 기본값 L
+	string printer_sub_title = 65;	// 방문증(입차증) 부제목 (제목아래 작은글씨)
+	string printer_sub_title_size = 66;	// 방문증(입차증) 부제목 크기(S: 작은글씨, L: 큰글씨) // 기본값 S
+	string printer_notice = 67;		// 방문증(입차증) 안내문구 (정보표시 후 하단 안내문구)
+	string printer_notice_size = 68;// 방문증(입차증) 안내문구 크기(S: 작은글씨, L: 큰글씨) // 기본값 S
+	string printer_footer = 69;		// 방문증(입차증) footer (최하단 표시문구)
+	string printer_footer_size = 70;// 방문증(입차증) footer 크기(S: 작은글씨, L: 큰글씨) // 기본값 S
+
+	string data_record_yn = 71;		// 출입 이력 기록여부(N 인경우 입출차 데이터가 남지 않음)
+	string reset_password = 72;		// 초기화 비밀번호
+	
+	string cctv_id = 81;			// cctv 접속 id
+	string cctv_pw = 82;			// cctv 접속 password
+
+	string visit_reserve_web_reg_ty				= 91;	// 방문예약 웹 종류 ex)PC11 01(미사용), 02(시간-마일리지), 03(횟수)
+	string visit_reserve_web_deposit_unit_tm	= 92;	// 방문예약 선차감 단위
+	string visit_reserve_web_min_remaining_tm	= 93;	// 방문예약 최소 잔여 시간(해당시간 미만으로 남은경우 등록 불가)
+	string visit_reserve_web_free_use_start_tm	= 94;	// 방문예약 미차감 시작시각(hhmm)
+	string visit_reserve_web_free_use_end_tm	= 95;	// 방문예약 미차감 종료시각(hhmm)
+	string visit_reserve_web_extra_useable_yn	= 96;	// 추가구매 사용 여부
+	string visit_reserve_web_extra_add_unit_tm	= 97;	// 추가구매 충전 단위
+	string visit_reserve_web_extra_use_max_cnt	= 98;	// 월 추가구매 최대 횟수
+	string visit_reserve_web_extra_use_info_msg	= 99;	// 추가구매 시 안내문구
+
+	string no_driving_ty				= 101;			// 부제 타입 ex)PM14 01(미사용), 02(2부제), 03(5부제), 04(10부제), 05(레인보우)
+	string visit_reserve_no_driving_yn	= 102;			// 방문차량 부제 적용 여부
+	string no_driving_start_tm			= 103;			// 부제 시작시각(시작시각과 종료시각이 같으면 종일 ex) 0000 ~ 0000)
+	string no_driving_end_tm			= 104;			// 부제 종료시각
+	string no_driving_use_day			= 105;			// 부제 운영 요일(일월화수목금토공: YYYYYYYY)
+	
+	string ho_index_use_yn				= 111;			// 호_index 사용여부
+}
+
+message pb_zoneset_l{
+	string park_id = 21;		// 고유ID
+	string local_id = 22;		// 로컬ID
+	string zone_id = 23;		// 구역 ID
+
+	int32 floor_id = 2;			// 층 ID
+	string zone_nm = 3;			// 구역 명
+	int32 max_parking_cnt = 4;	// 최대 주차 가능 대수
+	string si_notice_in_yn = 5;	// 입차 시 SI통보 여부
+	string si_notice_out_yn = 6;	// 출차 시 SI통보 여부
+	string rf_dup_in_yn = 7;	// RF 중복 허용 여부
+	string use_yn = 8;			// 사용 여부
+	string reg_nm = 9;			// 등록자명
+	string reg_dtm = 10;		// 등록 일시	YYYY-MM-DD hh:mm:ss
+}
+
+message pb_deviceset_l{
+	string park_id			    = 21;		// 고유ID
+	string local_id			    = 22;		// 로컬ID
+	string zone_id			    = 23;		// 구역ID
+	string device_id			= 1;		// 장비ID
+	string device_nm			= 2;		// 장비명
+	string device_type_cd		= 3;		// 장비 종류 ex)PM03 01(입구), 02(출구), 05(모니터링)
+	string device_ip			= 4;		// 장비IP
+	int32 device_port		    = 5;		// 장비 수신 port
+	string gate_cd			    = 6;		// 게이트코드 ex)PM04 01(정문), 02(후문), 03(관리사무소)
+	string lane				    = 7;		// 레인
+	string entry_type_cd		= 8;		// 입차 종류 코드 ex)PM11 01(정상), 02(출입통제)
+	string auto_entry_yn		= 9;		// 자동입차 여부
+	string vms_wait_upper_msg	= 10;		// 전광판 대기문구(상단)
+	string vms_wait_lower_msg	= 11;		// 전광판 대기문구(하단)
+	string vms_complete_msg		= 12;		// 전광판 완료문구
+	string use_yn				= 31;		// 사용여부
+	string reg_nm 				= 13;		// 등록자명
+	string reg_dtm 				= 14;		// 등록 일시	YYYY-MM-DD hh:mm:ss 등록 일시	YYYY-MM-DD hh:mm:ss
+	string printer_yn			= 32;		// 방문증 사용여부
+	string area_move_yn			= 41;		// 구역이동 여부
+	string lobby_id				= 42;		// 로비폰 매핑 키
+}
+
+message pb_guidancevms_l{
+	string park_id			    = 1;		// 고유ID
+	string local_id			    = 2;		// 로컬ID
+	string device_id			= 3;		// 장비ID
+	int32  device_index			= 4;		// device ID + index = key (신규는 미사용)
+	
+	string device_nm			= 11;		// 장비 명
+	string target_zone_id		= 12;		// 대상 구역 ID  // 빈칸인 경우 전체
+	string vms_ip				= 13;		// IP
+	int32  vms_port				= 14;		// port
+	int32  vms_485_id			= 15;		// 485 id
+	int32  module_col			= 16;		// 모듈개수
+	string digit_half_fix_yn	= 17;		// 반각 고정여부
+	string display_ty			= 18;		// 전광판 종류  ex) PM12(전광판종류) 01(일반), 02(흐르기)
+	string default_color		= 19;		// 기본색상  ex) PM13(전광판색상) 01(빨강), 02(초록), 03(노랑)
+	int32  full_std				= 20;		// 만차기준  ex) 해당 주차면 이하인 경우 만차로 판단
+	string full_msg				= 21;		// 표시문구  ex)
+	string full_color			= 22;		// 색상    ex)PM13(전광판색상) 01(빨강), 02(초록), 03(노랑)
+	int32  congested_std		= 23;		// 혼잡기준  ex) 해당 주차면 이하인 경우 혼잡으로 판단
+	string congested_msg		= 24;		// 표시문구  ex)
+	string congested_color		= 25;		// 색상    ex)PM13(전광판색상) 01(빨강), 02(초록), 03(노랑)
+	int32  capacious_std		= 26;		// 여유기준  ex) 해당 주차면 이상인 경우 여유로 판단
+	string capacious_msg		= 27;		// 표시문구  ex)
+	string capacious_color		= 28;		// 색상    ex)PM13(전광판색상) 01(빨강), 02(초록), 03(노랑)
+//	string reg_nm 				= 29;		// 등록자명
+	string reg_dtm 				= 30;		// 등록 일시	YYYY-MM-DD hh:mm:ss 등록 일시	YYYY-MM-DD hh:mm:ss
+}
+
+message pb_codeset_l{
+	string park_id = 21;		// 고유ID
+	string local_id = 22;		// 로컬ID
+
+	string cm_cd = 1;			// 공통 코드
+	string user_define_yn = 2;	// 사용자 지정 여부
+	string gp_nm = 3;			// 그룹 명(조회용)
+	string cd_nm = 4;			// 코드 명(조회용)
+	string cd_ds = 5;			// 화면 표시 문구(수정가능문구)
+	string memo = 6;			// 메모
+	string reg_nm = 9;			// 등록자명
+	string reg_dtm = 10;		// 등록 일시	YYYY-MM-DD hh:mm:ss
+	string use_yn = 11;			// 사용여부
+}
+
+message pb_blacklist_l{
+	string park_id = 1;			// 고유ID
+	string local_id = 2;		// 로컬ID
+	int32  blacklist_id = 3;	// blacklist_id
+
+	string blacklist_car_no = 11;	// 블랙리스트 등록 차량번호
+	string blacklist_info_1 = 12;	// 블랙리스트 등록한 동
+	string blacklist_info_2 = 13;	// 블랙리스트 등록한 호
+	string blacklist_info_3 = 21;	// 블랙리스트 등록한 호_index
+	string blacklist_memo = 14;		// 블랙리스트 등록 사유
+	string blacklist_reg_nm = 15;	// 블랙리스트 등록자
+	string blacklist_reg_dtm = 16;	// 블랙리스트 등록 일시
+	string blacklist_use_yn = 17;	// 블랙리스트 사용여부
+}
+
+message pb_holiday_l{
+	string park_id = 1;			// 고유ID
+	string local_id = 2;		// 로컬ID
+	int32  holiday_id = 3;		// holiday_id
+
+	string holiday_date = 11; 	// 휴일 날짜(key)
+	string holiday_nm = 12;		// 휴일 이름
+	string repeat_yn = 13;		// 반복 여부
+	string holiday_reg_nm = 15;	// 등록자
+	string holiday_reg_dtm = 16;// 등록 일시
+
+}
+
+message pb_visitreserve_l{
+	string park_id = 2;			// 고유 ID
+	string local_id = 3;		// 로컬 ID
+	
+	int32  reserve_id = 4;		// 예약 ID
+	string cust_nm = 5;			// 고객 명
+	string car_no = 6;			// 차량 번호
+	string tel_no = 7;			// 전화 번호
+	string mobile_no = 8;		// 휴대폰 번호
+	string household_info_1 = 14;	// 동
+	string household_info_2 = 15;	// 호
+	string ho_index = 16;			// 세대정보3(호index)
+	
+	string start_dt = 21; 		// 시작 일자
+	string end_dt = 22; 		// 종료 일자
+	string park_able_zone = 23; // 주차가능 구역
+	string memo = 25; 			// 메모
+	string use_yn = 26;			// 사용여부
+	
+	string reg_nm = 31;			// 등록자명
+	string reg_dtm = 32;		// 등록 일시
+	
+	string car_size = 41;		// 차량 규격 PP03 01(일반), 02(경차), 03(대형)
+	string car_type = 42;		// 챠랑 종류 PP05 01(일반), 02(전기차), 03(테슬라)
+	string disable_yn = 43;		// 장애인 여부
+	
+	string reserve_status = 51;	// 예약 상태 ex) R: 예약중, P: 주차중, Y: 정상사용(출차완료), N: 미사용(미사용 상태로 날짜 지남) / R상태 일 때만 취소 가능일
+	string deposit_basic_tm = 52;	// 마일리지 사용 시 선차감 시간(기본 제공 분)
+	string deposit_extra_tm	= 53;	// 마일리지 사용 시 선차감 시간(추가 구매 분)
+	string real_use_web_tm = 54;	// 실 사용 마일리지
+}
+
+message pb_rep_entry_term_l{
+	string park_id = 1;			// 고유 ID
+	string local_id = 2;		// 로컬 ID
+	string parking_sn = 3;		// 주차일련번호
+
+	string in_dtm = 11;			// 입차일시  YYYY-MM-DD hh:mm:ss
+	string car_no= 12;			// 차량번호
+	string cust_cd = 13;		// 고객구분코드	ex)PP01
+	string household_info_1 = 14;	// 동
+	string household_info_2 = 15;	// 호
+	string ho_index = 61;			// 세대정보3(호index)
+	string in_device_nm = 16;	// 입구 명
+
+	string out_dtm = 21;		// 출차일시  YYYY-MM-DD hh:mm:ss
+	string out_device_nm = 22;	// 출구 명
+
+	string car_status_cd = 31;	// 차량상태
+	int32  parking_tm = 41;		// 주차시간(분)
+	int32  apply_tm = 42;		// 적용시간(분) //차감제외시간을 뺀 주차시간
+	
+	string memo = 51;			// 방문사유
+}
+
+message pb_rep_regular_l{
+	string park_id = 1;			// 고유 ID
+	string local_id = 2;		// 로컬 ID
+	int32 rgst_id = 3;			// 정기권 ID
+
+	string sale_dt = 11;		// 등록일시  YYYY-MM-DD
+	string cust_nm= 12;			// 고객 명
+	string rgst_cust_cd = 13;	// 정기권고객구분코드	ex)PR03
+	
+	string car_no= 21;			// 차량번호
+	string tel_no = 22;			// 전화 번호
+	string mobile_no = 23;		// 휴대폰 번호
+	string rf_tag_id = 24;		// RF ID
+	
+	string household_info_1 = 31;	// 동
+	string household_info_2 = 32;	// 호
+	string ho_index = 33;			// 세대정보3(호index)
+	
+	string start_dt = 41;		// 시작일자
+	string end_dt = 42;			// 종료일자
+
+	string reg_nm = 51;			// 등록자명
+	string rgst_status_cd = 52;	// 정기권 상태코드 ex)PR01 01(신규), 03(일시정지), 04(해지)
+
+	string car_nm = 25;			// 차량 모델 명
+	string park_able_zone = 26; // 주차가능 구역
+	string memo = 27; 			// 메모
+	
+	string homenoti_yn = 61;	// 세대통보 여부
+	string car_size = 62;		// 차량 규격 PP03 01(일반), 02(경차), 03(대형)
+	string car_type = 63;		// 챠랑 종류 PP05 01(일반), 02(전기차), 03(테슬라)
+	string disable_yn = 64;		// 장애인 여부
+}
+
+message pb_rep_visitreserve_l{
+	string park_id = 1;			// 고유 ID
+	string local_id = 2;		// 로컬 ID
+	int32 reserve_id = 3;		// 예약 ID
+
+	string reg_dt = 11;			// 등록일시  YYYY-MM-DD
+	string cust_nm= 12;			// 고객 명
+
+	string car_no= 21;			// 차량번호
+	string tel_no = 22;			// 전화 번호
+	string mobile_no = 23;		// 휴대폰 번호
+	
+	string household_info_1 = 31;	// 동
+	string household_info_2 = 32;	// 호
+	string ho_index = 33;			// 세대정보3(호index)
+	
+	string start_dt = 41;		// 시작일자
+	string end_dt = 42;			// 종료일자
+
+	string reg_nm = 51;			// 등록자명
+	string use_yn = 52;			// 사용여부
+	
+	string car_size = 62;		// 차량 규격 PP03 01(일반), 02(경차), 03(대형)
+	string car_type = 63;		// 챠랑 종류 PP05 01(일반), 02(전기차), 03(테슬라)
+	string disable_yn = 64;		// 장애인 여부
+
+}
+
+
+message pb_rgst_record{
+	string park_id = 1;			// 고유 ID
+	string local_id = 2;		// 로컬 ID
+	int32 rgst_id = 3;			// 정기권 ID
+	string reg_ty = 4;			// 적용종류(add, change, delete)
+
+	string sale_dt = 11;		// 등록일시  YYYY-MM-DD
+	string cust_nm= 12;			// 고객 명
+	string car_no= 13;			// 차량번호
+	
+	string tel_no = 21;			// 전화 번호
+	string mobile_no = 22;		// 휴대폰 번호
+	string car_nm = 23;			// 차량 모델 명
+	string rgst_status_cd = 24;	// 정기권 상태코드 ex)PR01 01(신규), 03(일시정지), 04(해지)
+	string rgst_cust_cd = 25;	// 등록 고객 코드
+	string rf_tag_id = 26;		// RF 태그 ID
+
+	string address = 31;		// 주소
+	string household_info_1 = 32;	// 동
+	string household_info_2 = 33;	// 호
+	string ho_index = 35;			// 세대정보3(호index)
+	string homenoti_yn = 34;	// 세대통보 여부
+
+	string start_dt = 41; 		// 시작 일자
+	string end_dt = 42; 		// 종료 일자
+	string park_able_zone = 43; // 주차가능 구역
+	string available_days = 44;	// 사용 가능일 (일월화수목금토공 YYYYYYYY)
+	string memo = 45; 			// 메모
+	
+	string reg_nm = 51;			// 등록자명
+	string reg_dtm = 52;		// 등록 일시
+}
+
+message pb_visitreserve_record{
+	string park_id = 1;			// 고유 ID
+	string local_id = 2;		// 로컬 ID
+	int32 reserve_id = 3;		// 예약 ID
+	string reg_ty = 4;			// 적용종류(add, change, delete)
+
+	string cust_nm= 11;			// 고객 명
+	string car_no= 12;			// 차량번호
+	string tel_no = 13;			// 전화 번호
+	string mobile_no = 14;		// 휴대폰 번호
+	
+	string household_info_1 = 21;	// 동
+	string household_info_2 = 22;	// 호
+	string ho_index = 41;			// 세대정보3(호index)
+	string start_dt = 23;		// 시작일자
+	string end_dt = 24;			// 종료일자
+	
+	string park_able_zone = 31;	// 주차가능 구역
+	string memo = 32;			// 메모
+	string use_yn = 33;			// 사용여부
+	string reg_nm = 34;			// 등록자명
+	string reg_dtm = 35;		// 등록일시  YYYY-MM-DD
+}
+
+message pb_usable_regist_l{
+	string cust_cd = 1;			// 고객구분코드	ex)PP01 (02: 정기권), (03: 방문예약)
+	string park_id = 2;			// 고유 ID
+	string local_id = 3;		// 로컬 ID
+	int32  seq_id = 4;			// 등록차량 ID 정기권의 경우 rgst_id, 방문예약의 경우 reserve_id
+	string cust_nm = 5;			// 고객 명
+	string car_no = 6;			// 차량 번호
+	string tel_no = 7;			// 전화 번호
+	string mobile_no = 8;		// 휴대폰 번호
+
+	string household_info_1 = 14;	// 정보1 (동)
+	string household_info_2 = 15;	// 정보2 (호)
+	string ho_index = 16;			// 세대정보3(호index)
+	
+	string start_dt = 21; 		// 시작 일자
+	string end_dt = 22; 		// 종료 일자
+	string memo = 25; 			// 메모
+	
+	string reg_nm = 31;			// 등록자명
+	string reg_dtm = 32;		// 등록 일시
+}
+
+message pb_rep_entry_total_l{
+	string park_id = 1;			// 고유 ID
+	string local_id = 2;		// 로컬 ID
+
+	string household_info_1 = 11;	// 동
+	string household_info_2 = 12;	// 호
+	string ho_index = 14;			// 세대정보3(호index)
+	string cust_cd = 13;			// 고객구분코드	ex)PP01
+	
+	int32  total_cnt = 21;			// 총 건
+	int32  total_parking_tm = 22;	// 총 주차시간(분)
+	int32  total_apply_tm = 23;		// 총 적용시간(분) //차감제외시간을 뺀 주차시간
+}
+
+
+message pb_official_l{
+	string park_id = 1;			// 고유 ID
+	string local_id = 2;		// 로컬 ID
+
+	int32  official_id = 11;	// 공무차량 ID
+	string rgst_area = 12;		// 등록지역
+	string model_symbol = 13;	// 차종기호
+	string use_symbol = 14;		// 용도기호
+	string car_index = 15;		// 일련번호
+	string memo = 16;			// 메모
+//	string official_yn = 17;	// 공무여부(경찰, 소방 등)
+	string use_yn = 18;			// 사용여부
+
+	string reg_nm = 21;			// 등록자명
+	string reg_dtm = 22;		// 등록 일시
+}
+
+message pb_schedulerset_l{
+	string park_id = 1;			// 고유 ID
+	string local_id = 2;		// 로컬 ID
+
+	int32 scheduler_id 		 = 11;		// 스케줄러 ID
+	string scheduler_time    = 12;		// 동작 시각
+	string scheduler_type_cd = 13;		// 동작 유형 ex)PM15 01(자동출입 설정), 02(자동출입 해제)
+	string target_device_id  = 14;		// 대상 장비ID (빈칸이면 전체)
+	string use_yn            = 15;		// 사용 여부
+
+	string reg_nm = 21;			// 등록자명
+	string reg_dtm = 22;		// 등록 일시
+
+}
+
+message pb_rep_entry_count_l{
+	string event_dt = 1;			// 기준일자 YYYY-MM-DD
+	string zone_id = 2;
+	string zone_nm = 3;
+	string event_type = 4;			// 이벤트 종류 ex)in(입차), out(출차), move(구역이동)...
+	string in_cust_type_cd = 5;		// 고객구분코드 ex)PP01 02(정기권), 03(방문예약)...
+	int32 event_cnt = 6;			// 이벤트 횟수
+}

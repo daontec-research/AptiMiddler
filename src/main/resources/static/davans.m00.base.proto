@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package davans;
+import public "davans.common.proto";
+option java_package = "kr.co.daontec.dto.proto";
+
+/// 기본
+// 초기화 요청
+message m0001_device_init_req{
+	pb_header_req header = 1;	// 공통부분
+//	string device_ip = 2;		// 자신의 IP(소켓에서 획득하여 처리)
+	int32 device_port = 3;		// 자신의 listen port(없을경우 0)
+}
+message m0002_device_init_res{
+	pb_header_res header = 1;	// 공통부분
+	string park_id = 2;			// 주차장 ID
+	string local_id = 3;		// 현장 ID
+	string local_nm = 4;		// 주차장 명
+	string site_address = 5;	// 주차장 주소
+	string local_dtm = 6;		// 서버시각
+	string owner_nm = 21;		// 사업자 명
+	string license_no = 22;		// 사업자 번호
+	string tel_no = 23;			// 전화번호
+//	string receipt_add_msg = 24;// 영수증 추가 문구
+	
+	string zone_id = 7;			// 구역코드
+	string zone_nm = 8;			// 구역이름
+	string device_nm = 9;		// 장비이름
+	string device_ty_cd = 10;	// 장비 종류 코드 ex)PM03 01: 입구, 02: 출구, 03: 유인정산기, 04: 사전정산기, 05: 모니터링
+	string gate_cd = 11;		// 게이트 코드 ex)PM04
+	string img_prefix = 25;		// 이미지 조회 prefix
+	
+	string household_info_suffix_1 = 26;	// 세대정보1 접미사(동)
+	string household_info_suffix_2 = 27;	// 세대정보2 접미사(호)
+	string ho_index_suffix = 28;
+
+	string vms_upper_msg = 31;	// 상단 메시지 (입, 출구 판단하여 구분)
+	string vms_lower_msg = 32;	// 하단 메시지 (입, 출구 판단하여 구분)
+	string vms_complete_msg = 33; // 완료 메시지 (입, 출구 판단하여 구분)
+
+	string base_lang_cd = 41;	// 기본 언어 코드 ex)PC10 01: 한국어, 02: 영어, 03: 중국어, 04: 일어
+	string commit_reason_yn = 51;	// 입차허용, 출차허용 시 사유 입력 여부
+	
+	string data_record_yn = 61;	// 출입 이력 기록여부(N 인경우 입출차 데이터가 남지 않음)
+	
+	string reset_password = 71; // 초기화 비밀번호
+	string ho_index_use_yn = 72;
+}
+
+// 장비 상태정보
+message m0003_device_status_req{
+	pb_header_req header = 1;	// 공통부분
+	string bar_status_cd = 2;	// 차단바상태 ex)PP06
+	string bar_err_msg = 3;		// 바관련 에러메시지
+	string bar_err_chg_yn = 4;	// 바관련 에러 변화여부(Y일 경우만 갱신)
+	string lpr_err_msg = 5;		// LPR관련 에러메시지
+	string lpr_err_chg_yn = 6;	// LPR관련 에러 변화여부(Y일 경우만 갱신)
+	string vms_err_msg = 7;		// 전광판관련 에러메시지
+	string vms_err_chg_yn = 8;	// 전광판관련 에러 변환여부(Y일 경우만 갱신)
+	string rf_err_msg = 9;		// RF리더관련 에러메시지
+	string rf_err_chg_yn = 10;	// RF리더관련 에러 변환여부(Y일 경우만 갱신)
+//	string voip_err_msg = 21;		// voip 관련 에러메시지
+//	string voip_err_chg_yn = 22;	// voip 관련 에러 변환여부(Y일 경우만 갱신)
+	string device_err_msg = 11;		// 장비 에러메시지
+	string device_err_chg_yn = 12;	// 장비 에러 변환여부(Y일 경우만 갱신)
+}
+message m0004_device_status_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 사용자 로그인
+message m0005_user_login_req{
+	pb_header_req header = 1;	// 공통부분
+	string user_id = 2;			// 사용자 ID  U타입만
+	string password = 3;		// 비밀번호 암호화 된 채로
+}
+message m0006_user_login_res{
+	pb_header_res header = 1;	// 공통부분
+	string user_nm = 2;			// 사용자 이름
+	string level_cd = 3;		// 권한등급코드	PC04
+//	string company = 4;			// 소속 업체 ex)PM01의 값으로 string으로 내림
+	string first_run = 5;		// 최초 실행 여부
+	string available_zone = 11;	// 사용가능 구역
+}
+
+// 공통 코드 리스트
+message m0009_common_code_list_req{
+	pb_header_req header = 1;	// 공통부분
+	string user_id = 2;			// 사용자 ID  U타입만
+}
+message m0010_common_code_list_res{
+	pb_header_res header = 1;	// 공통부분
+	string user_id = 2;			// 사용자 ID  U타입만
+
+	repeated pb_c_code_l list = 3;	// 코드 리스트 목록
+}
+
+// 장비 화면 위치 정보
+message m0011_device_position_info_req{
+	pb_header_req header = 1;	// 공통부분
+}
+message m0012_device_position_info_res{
+	pb_header_res header = 1;	// 공통부분
+
+	repeated pb_device_l list = 2;	// 장비 목록
+}
+
+// 장비 화면 위치 설정
+message m0051_device_position_set_req{
+	pb_header_req header = 1;	// 공통부분
+	string user_id = 2;			// 사용자ID
+	string target_device_id = 3;	// 관리 장비ID
+	string target_device_nm = 4;	// 관리 장비이름
+	int32 x_position = 5;		// x좌표
+	int32 y_position = 6;		// y좌표
+	int32 width = 7;			// 가로
+	int32 height = 8;			// 세로
+	string display_yn = 9;		// 화면표시 여부
+}
+message m0052_device_position_set_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 비밀번호 변경
+message m0061_change_password_req{
+	pb_header_req header = 1;	// 공통부분
+	string user_id = 2;			// 변경할 사용자ID
+	string reset_yn = 3;		// 초기화 여부(관리자 권한만 Y로 세팅할 수 있음)
+	string password = 4;		// 현재 비밀번호
+	string password_new = 5;	// 변경할 비밀번호
+}
+message m0062_change_password_res{
+	pb_header_res header = 1;	// 공통부분
+}

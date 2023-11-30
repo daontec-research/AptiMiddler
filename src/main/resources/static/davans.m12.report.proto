@@ -1,0 +1,169 @@
+syntax = "proto3";
+
+package davans;
+
+import public "davans.common.proto";
+option java_package = "kr.co.daontec.dto.proto";
+//// 보고서
+// 기간별 입차현황
+message m1201_entry_list_term_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+
+	string car_no = 4;			// 차량번호(비어있으면 전체)
+	string exists_yn = 5;		// 상태기준 ex)비어있으면 전체, Y: 미출차, N: 출차전체, E: 출차완료, R: 중복입차, M: 수동스위치
+	string cust_cd = 6;			// 고객구분 ex)PP01 비어있으면 전체, 00(방문전체), 01(방문차량), 02(정기권), 03(방문예약), 04(자동입차), 05(수동스위치)
+	string start_dt = 7;		// 시작일자(YYYY-MM-DD)
+	string end_dt = 8;			// 종료일자(YYYY-MM-DD)
+	
+	int32 data_cnt = 9;			// 최대 조회 수
+	string order_std = 10;		// 정렬 기준(in_dtm, out_dtm) 기본 in_dtm
+	string order_by = 11;		// 정렬 순서(asc, desc) 기본 asc
+	
+	string specific_start_tm = 31;	// 시간 지정 시 시작시간(hh:mm:ss) / 조회 기준은 order_std와 동일
+	string specific_end_tm = 32;	// 시간 지정 시 종료시간(hh:mm:ss) / 조회 기준은 order_std와 동일
+
+	string household_info_1 = 33;	// 세대정보1(동)
+	string household_info_2 = 34;	// 세대정보2(호)
+	string ho_index = 51;			// 세대정보3(호index)
+
+	int32 parking_tm = 35;		// 주차시간 ex)0이면 전체, 0보다 큰 경우 해당 시간(분) 이상 주차 차량만 표시
+	int32 apply_tm = 36;		// 적용주차시간 ex)0이면 전체, 0보다 큰 경우 해당 시간(분) 이상 주차 차량만 표시
+	
+	string target_device_id = 37;	// 장비ID ex)비었으면 전체, 지정 시 지정 장비로 입(출)차한 차량만 표시 / 조회 기준은 order_std와 동일
+	//string out_device_id = 38;	// 출구 장비ID ex)비었으면 전체, 지정 시 지정 장비로 출차한 차량만 표시
+	
+	string user_id = 41;		// 로그인ID
+}
+message m1202_entry_list_term_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_rep_entry_term_l list = 2;	// 차량 리스트
+	
+	int32 total_list_cnt = 11;			// 표시된 총 데이터 수
+	int32 total_list_parking_tm = 12;	// 표시된 총 주차시간
+	int32 total_list_apply_tm = 13;		// 표시된 총 적용 주차시간
+}
+
+// 정기권 현황
+message m1203_regular_list_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+
+	string car_no = 4;			// 차량번호(비어있으면 전체)
+	string exists_yn = 5;		// 상태기준 ex)비어있으면 전체, Y: 사용가능정기권, N: 사용불가정기권
+	string rgst_cust_cd = 6;	// 정기권고객구분 ex)PR03 비어있으면 전체 (표시문구 코드)
+
+	string household_info_1 = 7;	// 세대정보1(동)
+	string household_info_2 = 8;	// 세대정보2(호)
+	string ho_index = 21;			// 세대정보3(호index)
+
+	string start_dt = 9;		// 시작일자(YYYY-MM-DD) - 등록일자 기준
+	string end_dt = 10;			// 종료일자(YYYY-MM-DD) - 등록일자 기준
+	int32 data_cnt = 11;		// 최대 조회 수
+	string order_by = 12;		// 정렬 순서(asc, desc) 기본 asc
+	
+	string homenoti_yn = 61;	// 세대통보 여부
+	string car_size = 62;		// 차량 규격 PP03 01(일반), 02(경차), 03(대형)
+	string car_type = 63;		// 챠랑 종류 PP05 01(일반), 02(전기차), 03(테슬라)
+	string disable_yn = 64;		// 장애인 여부
+
+	string user_id = 41;		// 로그인ID
+}
+message m1204_regular_list_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_rep_regular_l list = 2;	// 정기권 리스트
+}
+
+// 방문자 현황
+message m1205_visit_reserve_list_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+
+	string car_no = 4;			// 차량번호(비어있으면 전체)
+	string exists_yn = 5;		// 상태기준 ex)비어있으면 전체, Y: 사용가능, N: 사용불가
+
+	string household_info_1 = 6;	// 세대정보1(동)
+	string household_info_2 = 7;	// 세대정보2(호)
+	string ho_index = 21;			// 세대정보3(호index)
+	
+	string start_dt = 8;		// 시작일자(YYYY-MM-DD) - 등록일자 기준
+	string end_dt = 9;			// 종료일자(YYYY-MM-DD) - 등록일자 기준
+	int32 data_cnt = 10;		// 최대 조회 수
+	string order_by = 11;		// 정렬 순서(asc, desc) 기본 asc
+	
+	string car_size = 62;		// 차량 규격 PP03 01(일반), 02(경차), 03(대형)
+	string car_type = 63;		// 챠랑 종류 PP05 01(일반), 02(전기차), 03(테슬라)
+	string disable_yn = 64;		// 장애인 여부
+
+	string user_id = 41;		// 로그인ID
+}
+message m1206_visit_reserve_list_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_rep_visitreserve_l list = 2;	// 방문예약 리스트
+}
+
+// 방문차량 집계 (세대 별 방문차량 집계현황)
+message m1207_visit_list_total_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+
+	string car_no = 4;			// 차량번호(비어있으면 전체)
+//	string exists_yn = 5;		// 상태기준 출차전체 고정! ex)비어있으면 전체, Y: 미출차, N: 출차전체, E: 출차완료, R: 중복입차, M: 수동스위치
+//	string cust_cd = 6;			// 고객구분 방문전체 고정! ex)PP01 비어있으면 전체, 00(방문전체), 01(방문차량), 02(정기권), 03(방문예약), 04(자동입차), 05(수동스위치)
+	string start_dt = 7;		// 시작일자(YYYY-MM-DD)
+	string end_dt = 8;			// 종료일자(YYYY-MM-DD)
+	
+	int32 data_cnt = 9;			// 최대 조회 수
+	string order_std = 10;		// 정렬 기준(household_info_1, household_info_2, parking_tm, apply_tm) 기본 household_info_1
+	string order_by = 11;		// 정렬 순서(asc, desc) 기본 asc
+	
+//	string specific_start_tm = 31;	// 시간 지정 시 시작시간(hh:mm:ss)
+//	string specific_end_tm = 32;	// 시간 지정 시 종료시간(hh:mm:ss)
+
+	string household_info_1 = 33;	// 세대정보1(동)
+	string household_info_2 = 34;	// 세대정보2(호)
+	string ho_index = 21;			// 세대정보3(호index)
+	
+	int32 parking_tm = 35;		// 주차시간 ex)0이면 전체, 0보다 큰 경우 해당 시간(분) 이상 주차 차량만 표시
+	int32 apply_tm = 36;		// 적용주차시간 ex)0이면 전체, 0보다 큰 경우 해당 시간(분) 이상 주차 차량만 표시
+	
+//	string in_device_id = 37;	// 입구 장비ID ex)비었으면 전체, 지정 시 지정 장비로 입차한 차량만 표시
+//	string out_device_id = 38;	// 출구 장비ID ex)비었으면 전체, 지정 시 지정 장비로 출차한 차량만 표시
+
+	string user_id = 41;		// 로그인ID
+}
+message m1208_visit_list_total_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_rep_entry_total_l list = 2;	// 집계 리스트
+	
+	int32 total_list_cnt = 11;			// 표시된 총 데이터 수
+	int32 total_list_parking_tm = 12;	// 표시된 총 주차시간
+	int32 total_list_apply_ym = 13;		// 표시된 총 적용 주차시간
+}
+
+
+// 기간별 출입 횟수
+message m1209_entry_count_term_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+	string zone_id = 4;			// 구역ID (비어있으면 전체)
+
+	string start_dt = 5;		// 시작일자(YYYY-MM-DD)
+	string end_dt = 6;			// 종료일자(YYYY-MM-DD)
+	
+	string user_id = 7;			// 로그인ID
+}
+message m1210_entry_count_term_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_rep_entry_count_l list = 2;	// 집계 리스트
+}

@@ -1,0 +1,7 @@
+
+#spring:
+#  datasource:
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#    url: jdbc:sqlserver://${daontec.dburl}:${daontec.dbport};databaseName=${daontec.dbname};encrypt=false
+#    username: ${daontec.dbusername}
+#    password: $daondb3030!@

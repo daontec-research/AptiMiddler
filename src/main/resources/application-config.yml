@@ -1,0 +1,13 @@
+#daontec:
+#  dburl: "rnd.daontec.co.kr"
+#  dbport: 1933
+#  dbname: "DAVANS_DL_창욱백업"
+#  dbusername: "daontec"
+#  logname: log
+#
+#server:
+#  port: 8080
+#
+#davans:
+#  port: 9801
+#  host: "rnd.daontec.co.kr"

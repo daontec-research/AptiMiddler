@@ -1,0 +1,539 @@
+syntax = "proto3";
+
+package davans;
+import public "davans.common.proto";
+option java_package = "kr.co.daontec.dto.proto";
+///설정 화면(조회/등록)
+// 사용자 관리(조회)
+message m1101_userset_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+	string user_nm = 4;			// 사용자 명(비어있으면 전체)
+}
+message m1102_userset_search_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_userset_l list = 2;	// 리스트
+}
+
+// 사용자 관리(설정)
+message m1103_userset_regist_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+	string reg_id = 4;			// 등록자ID(로그인 한 사용자ID)
+	string reg_ty = 5;			// 종류 add: 신규, delete: 삭제, change: 수정
+
+	string user_id = 11;			// 사용자ID
+	string user_nm = 12;			// 사용자 명
+	string password = 13;			// 비밀번호(조회 시 빈값)
+	string password_end_dt = 14;	// 비밀번호 종료일자
+	string level_cd = 16;			// 권한 코드 ex) PC04 01(시스템관리자), 02(일반관리자), 03(사용자)
+	string hold_cd = 17;			// 근무 코드 ex) PM02 01(재직), 02(업무중지), 03(퇴직)
+//	string first_run = 21;		// 최초실행 여부(초기화 프로토콜 별도로 있음 m0061)
+	string available_zone = 31;	// 사용가능 구역 (시스템 관리자는 무시됨, 일반관리자와 사용자는 조회 및 등록가능 구역이 제한됨)
+}
+message m1104_userset_regist_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 주차장 관리(조회)
+message m1105_parkset_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+}
+message m1106_parkset_search_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_parkset_l list = 2;	// 리스트
+}
+
+// 주차장 관리(설정)
+message m1107_parkset_regist_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+	string reg_id = 4;			// 등록자ID(로그인 한 사용자ID)
+	string reg_ty = 5;			// 종류 add: 신규, delete: 삭제, change: 수정
+
+	string project_id = 11;		// 프로젝트ID
+	string park_nm = 12;		// 주차장 명
+	string company_nm = 13;		// 운영회사명
+	string owner_nm = 14;		// 대표자명
+	string license_no = 15;		// 사업자등록번호
+	string park_address = 16;	// 주소
+	string latitude = 17;		// 위도
+	string longitude = 18;		// 경도
+	string tel_no = 19;			// 전화번호
+	string fax_no = 20;			// 팩스번호
+	int32 gate_opened_base_tm = 31;	// 수동스위치 사용 시 유효데이터 기준 시간
+	string base_lang_cd = 21;	// 기본 언어 코드
+	string img_prefix = 22;		// 이미지 경로 prefix
+	string household_info_suffix_1 = 23;	// 세대정보 접미사1 ex)동
+	string household_info_suffix_2 = 24;	// 세대정보 접미사2 ex)호
+	string ho_index_suffix = 25;			// 세대정보3 접미사(호_index)
+	
+	int32 history_ret_period = 41;	// 과거데이터 보존 기간(월)
+	int32 entry_ret_period = 42;	// 미출차 데이터 정리 기준일(day)
+	string commit_reason_yn	= 51;	// 입차허용, 출차허용 시 사유 사용여부
+	
+//	string visit_reserve_limit_ty = 52;	// 방문예약 제한 종류(N: 제한없음, C: 횟수, T: 시간(마일리지)) // 기본값 N
+//	int32 visit_reserve_limit_cnt = 53;	// 방문예약 횟수 제한 시 허용 횟수
+//	int32 visit_reserve_limit_tm = 54;	// 방문예약 시간 제한 시 허용 시간(분)
+//	string free_use_start_tm = 61;	// 방문 마일리지 사용 제외 시작시각(hhmm)
+//	string free_use_end_tm = 62;	// 방문 마일리지 사용 제외 종료시각(hhmm)
+
+	string printer_title = 63;		// 방문증(입차증) 제목 (최상단 큰글씨)
+	string printer_title_size = 64;	// 방문증(입차증) 제목 크기(S: 작은글씨, L: 큰글씨) // 기본값 L
+	string printer_sub_title = 65;	// 방문증(입차증) 부제목 (제목아래 작은글씨)
+	string printer_sub_title_size = 66;	// 방문증(입차증) 부제목 크기(S: 작은글씨, L: 큰글씨) // 기본값 S
+	string printer_notice = 67;		// 방문증(입차증) 안내문구 (정보표시 후 하단 안내문구)
+	string printer_notice_size = 68;// 방문증(입차증) 안내문구 크기(S: 작은글씨, L: 큰글씨) // 기본값 S
+	string printer_footer = 69;		// 방문증(입차증) footer (최하단 표시문구)
+	string printer_footer_size = 70;// 방문증(입차증) footer 크기(S: 작은글씨, L: 큰글씨) // 기본값 S
+	
+	string data_record_yn = 71;		// 출입 이력 기록여부(N 인경우 입출차 데이터가 남지 않음)
+	string reset_password = 72;		// 초기화 비밀번호
+	
+	string cctv_id = 81;			// cctv 접속 id
+	string cctv_pw = 82;			// cctv 접속 password
+	
+	string visit_reserve_web_reg_ty				= 91;	// 방문예약 마일리지 종류 ex)PC11 01(미사용), 02(마일리지-시간), 03(마일리지-횟수)
+	string visit_reserve_web_deposit_unit_tm	= 92;	// 마일리지 선차감 단위
+	string visit_reserve_web_min_remaining_tm	= 93;	// 예약가능 최소 마일리지(해당시간 미만으로 남은경우 등록 불가)
+	string visit_reserve_web_free_use_start_tm	= 94;	// 마일리지 미차감 시작시각(hhmm)
+	string visit_reserve_web_free_use_end_tm	= 95;	// 마일리지 미차감 종료시각(hhmm)
+	string visit_reserve_web_extra_useable_yn	= 96;	// 초과사용 옵션 ex) Y(추가구매 후 사용), N(초과사용 불가), U(제한없이 사용)
+	string visit_reserve_web_extra_add_unit_tm	= 97;	// 추가구매 충전 단위
+	string visit_reserve_web_extra_use_max_cnt	= 98;	// 월 추가구매 최대 횟수
+	string visit_reserve_web_extra_use_info_msg	= 99;	// 추가구매 시 안내문구
+	
+	string no_driving_ty				= 101;			// 부제 타입 ex)PM14 01(미사용), 02(2부제), 03(5부제), 04(10부제), 05(레인보우)
+	string visit_reserve_no_driving_yn	= 102;			// 방문차량 부제 적용 여부
+	string no_driving_start_tm			= 103;			// 부제 시작시각(시작시각과 종료시각이 같으면 종일 ex) 0000 ~ 0000)
+	string no_driving_end_tm			= 104;			// 부제 종료시각
+	string no_driving_use_day			= 105;			// 부제 운영 요일(일월화수목금토공: YYYYYYYY)
+	
+	string ho_index_use_yn				= 111;			// 호_index 사용여부
+	
+}
+message m1108_parkset_regist_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 주차 구역 관리(조회)
+message m1109_zoneset_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+	string zone_id = 4;			// 구역ID
+}
+message m1110_zoneset_search_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_zoneset_l list = 2;	// 리스트
+}
+
+// 주차 구역 관리(설정)
+message m1111_zoneset_regist_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID 
+	string local_id = 3;		// 로컬ID 
+	string reg_id = 4;			// 등록자ID(로그인 한 사용자ID)
+	string reg_ty = 5;			// 종류 add: 신규, delete: 삭제, change: 수정
+
+	string zone_id = 11;			// 구역 ID
+	int32 floor_id = 12;			// 층 ID
+	string zone_nm = 13;			// 구역 명
+	int32 max_parking_cnt = 14;	// 최대 주차 가능 대수
+	string si_notice_in_yn = 15;	// 입차 시 SI통보 여부
+	string si_notice_out_yn = 16;	// 출차 시 SI통보 여부
+	string rf_dup_in_yn = 17;		// RF 중복 허용 여부
+	string use_yn = 18;				// 사용 여부
+}
+message m1112_zoneset_regist_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 장비 관리(조회)
+message m1113_deviceset_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+	string device_id = 4;		// 장비ID
+	string use_yn = 5;			// 사용여부
+}
+message m1114_deviceset_search_res{
+	pb_header_res header = 1;	// 공통부분
+
+	repeated pb_deviceset_l list = 2;	// 리스트
+}
+
+// 장비 관리(설정)
+message m1115_deviceset_regist_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID 
+	string local_id = 3;		// 로컬ID 
+	string reg_id = 4;			// 등록자ID(로그인 한 사용자ID)
+	string reg_ty = 5;			// 종류 add: 신규, delete: 삭제, change: 수정
+
+	string zone_id			    = 6;	// 구역ID
+	string device_id			= 11;	// 장비ID
+	string device_nm			= 12;	// 장비명
+	string device_type_cd		= 13;	// 장비 종류 ex)PM03 01(입구), 02(출구), 05(모니터링)
+	string device_ip			= 14;	// 장비IP
+	int32  device_port		    = 15;	// 장비 수신 port
+	string gate_cd			    = 16;	// 게이트코드 ex)PM04 01(정문), 02(후문), 03(관리사무소)
+	string lane				    = 17;	// 레인
+	string entry_type_cd		= 18;	// 입차 종류 코드 ex)PM11 01(정상), 02(출입통제)
+	string auto_entry_yn		= 19;	// 자동입차 여부
+	string vms_wait_upper_msg	= 20;	// 전광판 대기문구(상단)
+	string vms_wait_lower_msg	= 21;	// 전광판 대기문구(하단)
+	string vms_complete_msg		= 22;	// 전광판 완료문구
+	string use_yn				= 31;	// 사용여부
+	string printer_yn			= 32;	// 방문증 사용여부
+	string area_move_yn			= 41;	// 구역이동 여부
+	string lobby_id				= 42;	// 로비폰 매핑 키
+}
+message m1116_deviceset_regist_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 공통코드 관리(조회)
+message m1117_codeset_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+	string user_define_yn = 4;	// 사용자 지정 가능 여부
+	string use_yn = 5;			// 사용여부
+}
+message m1118_codeset_search_res{
+	pb_header_res header = 1;	// 공통부분
+
+	repeated pb_codeset_l list = 2;	// 리스트
+}
+
+// 공통코드 관리(설정)
+message m1119_codeset_regist_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID 
+	string local_id = 3;		// 로컬ID 
+	string reg_id = 4;			// 등록자ID(로그인 한 사용자ID)
+	string reg_ty = 5;			// 종류 add: 신규, delete: 삭제, change: 수정
+
+	string cm_cd			    = 11;	// 공통 코드
+	string cd_nm				= 12;	// 코드 명(add 시에만)
+	string cd_ds				= 13;	// 코드 표시 문구
+	string memo					= 14;	// 메모
+	
+	string use_yn 				= 15;	// 사용여부
+}
+message m1120_codeset_regist_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 패턴 번호 관리(조회)
+message m1121_pattern_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유id (비어있으면 전체)
+	string local_id = 3;		// 로컬id (비어있으면 전체)
+	string car_no = 4;			// 차량번호(비어있으면 전체)
+	string pattern_no = 5;		// 패턴번호(오인식 되는 번호 비어있으면 전체)
+}
+message m1122_pattern_search_res{
+	pb_header_res header = 1;	// 공통부분
+
+	repeated pb_pattern_l list = 2;	// 리스트
+}
+
+// 패턴 번호 관리(설정)
+message m1123_pattern_regist_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID 
+	string local_id = 3;		// 로컬ID 
+	string reg_id = 4;			// 등록자ID(로그인 한 사용자ID)
+	string reg_ty = 5;			// 종류 add: 신규, delete: 삭제, change: 수정
+
+	int32  pattern_id = 10;		// 패턴ID(key) 신규는 서버에서 생성
+	string car_no = 11;			// 차량번호
+	string pattern_no = 12;		// 패턴번호(오인식 되는 번호)
+	string memo = 13;			// 메모
+	string use_yn = 14;			// 사용여부
+}
+message m1124_pattern_regist_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	int32 pattern_id = 11;		// 패턴ID(key)
+}
+
+// 원격 전원제어기 관리(조회)
+message m1131_power_controller_list_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유id (비어있으면 전체)
+	string local_id = 3;		// 로컬id (비어있으면 전체)
+	string target_device_id = 4;	// Device ID(비어있으면 전체)
+}
+message m1132_power_controller_list_res{
+	pb_header_res header = 1;	// 공통부분
+
+	repeated pb_c_power_controller_l list = 2;	// 컨트롤러 목록
+}
+
+// 원격 전원제어기 관리(설정)
+message m1133_power_controller_set_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID 
+	string local_id = 3;		// 로컬ID 
+	string reg_id = 4;			// 등록자ID(로그인 한 사용자ID)
+	string reg_ty = 5;			// 종류 add: 신규, delete: 삭제, change: 수정
+	int32  controller_id = 11;	// 제어기 ID
+	
+	string target_device_id = 6;	// 장비 ID
+//	string controller_ip = 7;	// 제어기 IP
+	string controller_ch = 8;	// 제어기 채널
+	
+	string controller_ds = 9;	// 화면 표시 문구
+	string use_yn = 10;			// 사용 여부
+}
+message m1134_power_controller_set_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+
+// 단독 전광판 관리(조회)
+message m1141_vmsset_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID
+	string local_id = 3;		// 로컬ID
+	string device_id = 4;		// 장비ID
+}
+message m1142_vmsset_search_res{
+	pb_header_res header = 1;	// 공통부분
+	string park_id 		= 2;	// 고유ID 
+	string local_id 	= 3;	// 로컬ID 
+
+	string zone_id		= 6;	// 구역ID
+	string device_id	= 7;	// 장비ID
+
+	int32  camera_event_port	= 11;	// 카메라 이벤트 수신 port (주의: deviceset_search에 있는 device_port는 스트리밍을 위한 포트)
+	string vms_type_cd			= 12;	// 전광판 종류 ex)PM12 01(일반), 02(흐르는)
+	string vms_ip				= 13;	// 장비IP
+	int32  vms_port		    	= 14;	// 장비 수신 port
+	string vms_wait_upper_msg	= 15;	// 전광판 상단 대기문구
+	string vms_wait_upper_color	= 16;	// 전광판 상단 대기문구 색상
+	string vms_wait_lower_msg	= 17;	// 전광판 하단 대기문구
+	string vms_wait_lower_color	= 18;	// 전광판 하단 대기문구 색상
+	string vms_guest_msg		= 19;	// 전광판 미등록(미인식 포함)차량 표시문구
+	string vms_guest_color		= 20;	// 전광판 미등록(미인식 포함)차량 표시문구 색상
+	string vms_rgst_color		= 21;	// 전광판 등록차량 표시문구 색상
+	int32 vms_display_tm		= 22;	// 전광판 표시 시간(초)
+	
+	string entry_target_device_id = 23;	// 입차기록으로 잡을 경우 지정할 ID, 빈칸인 경우 입차 잡지 않음.
+	string reg_nm				= 24;	// 등록자 이름
+	string reg_dtm				= 25;	// 등록일시(YYYY-MM-DD YYYY-MM-DD)
+}
+
+// 단독 전광판 관리(설정)
+message m1143_vmsset_regist_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id 		= 2;	// 고유ID 
+	string local_id 	= 3;	// 로컬ID 
+	string reg_id 		= 4;	// 등록자ID(로그인 한 사용자ID)
+	string reg_ty 		= 5;	// change: 수정, delete: 삭제 (신규는 없음 장비:전광판 = 1:1 또는 1:0)
+
+	string zone_id		= 6;	// 구역ID
+	string device_id	= 7;	// 장비ID
+
+	int32  camera_event_port	= 11;	// 카메라 이벤트 수신 port (주의: deviceset_search에 있는 device_port는 스트리밍을 위한 포트)
+	string vms_type_cd			= 12;	// 전광판 종류 ex)PM12 01(일반), 02(흐르는)
+	string vms_ip				= 13;	// 장비IP
+	int32  vms_port		    	= 14;	// 장비 수신 port
+	string vms_wait_upper_msg	= 15;	// 전광판 상단 대기문구
+	string vms_wait_upper_color	= 16;	// 전광판 상단 대기문구 색상(미사용)
+	string vms_wait_lower_msg	= 17;	// 전광판 하단 대기문구
+	string vms_wait_lower_color	= 18;	// 전광판 하단 대기문구 색상(미사용)
+	string vms_guest_msg		= 19;	// 전광판 미등록(미인식 포함)차량 표시문구
+	string vms_guest_color		= 20;	// 전광판 미등록(미인식 포함)차량 표시문구 색상(미사용)
+	string vms_rgst_color		= 21;	// 전광판 등록차량 표시문구 색상(미사용)
+	int32 vms_display_tm		= 22;	// 전광판 표시 시간(초)
+
+	string entry_target_device_id = 23;	// 입차기록으로 잡을 경우 지정할 ID, 빈칸인 경우 입차 잡지 않음.
+}
+message m1144_vmsset_regist_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+
+// 블랙리스트 관리(조회)
+message m1151_blacklistset_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID
+	string local_id = 3;		// 로컬ID
+	
+	string car_no = 11; 		// 차량번호 빈칸인 경우 전체
+	string household_info_1 = 12;	// 동 빈칸인 경우 전체
+	string household_info_2 = 13;	// 호 빈칸인 경우 전체
+	string ho_index = 14;			// 호_index
+}
+message m1152_blacklistset_search_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_blacklist_l list = 2;	// 리스트
+}
+
+// 블랙리스트 관리(설정)
+message m1153_blacklistset_regist_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id 		= 2;	// 고유ID 
+	string local_id 	= 3;	// 로컬ID 
+	string reg_id 		= 4;	// 등록자ID(로그인 한 사용자ID)
+	string reg_ty 		= 5;	// 종류 add: 신규, delete: 삭제, change: 수정
+
+	int32 blacklist_id = 11;
+	string blacklist_car_no = 12;	// 블랙리스트 등록 차량번호
+	string blacklist_info_1 = 13;	// 블랙리스트 등록한 동
+	string blacklist_info_2 = 14;	// 블랙리스트 등록한 호
+	string blacklist_info_3 = 21;	// 블랙리스트 등록한 호_index
+	string blacklist_memo = 15;		// 블랙리스트 등록 사유
+	string blacklist_use_yn = 16;	// 블랙리스트 사용여부
+}
+message m1154_blacklistset_regist_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	int32 blacklist_id = 11;	// 등록(수정, 삭제) 한 blacklist_id
+}
+
+
+// 휴일 관리(조회)
+message m1161_holidayset_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID
+	string local_id = 3;		// 로컬ID
+	
+	string holiday_date = 11; 	// 휴일 날짜
+	string holiday_nm = 12;		// 휴일 이름
+	string repeat_yn = 13;		// 반복 여부
+}
+message m1162_holidayset_search_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_holiday_l list = 2;	// 리스트
+}
+
+// 휴일 관리(설정)
+message m1163_holidayset_regist_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id 		= 2;	// 고유ID 
+	string local_id 	= 3;	// 로컬ID 
+	string reg_id 		= 4;	// 등록자ID(로그인 한 사용자ID)
+	string reg_ty 		= 5;	// 종류 add: 신규, delete: 삭제, change: 수정
+
+	int32  holiday_id	= 11;	// key (신규는 미사용)
+	string holiday_date	= 12; 	// 휴일 날짜
+	string holiday_nm	= 13;	// 휴일 명
+	string repeat_yn	= 14;	// 반복 여부
+}
+message m1164_holidayset_regist_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	int32 holiday_id = 11;	// 등록(수정, 삭제) 한 holiday_id
+}
+
+
+// 유도 전광판 관리(조회)
+message m1171_guidancevmsset_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID
+	string local_id = 3;		// 로컬ID
+	string device_id = 4;		// 장비ID		빈 경우 전체
+
+}
+message m1172_guidancevmsset_search_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_guidancevms_l list = 2;	// 리스트
+}
+
+// 유도 전광판 관리(설정)
+message m1173_guidancevmsset_regist_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id 		= 2;	// 고유ID 
+	string local_id 	= 3;	// 로컬ID 
+	string device_id	= 4;	// 장비ID
+	string reg_id 		= 5;	// 등록자ID(로그인 한 사용자ID)
+	string reg_ty 		= 6;	// 종류 add: 신규, delete: 삭제, change: 수정
+
+	int32  device_index		= 11;	// device ID + index = key (신규는 미사용)
+	string target_zone_id	= 12;	// 대상 구역 ID  // 빈칸인 경우 전체
+	string vms_ip			= 13;	// IP
+	int32  vms_port			= 14;	// port
+	int32  vms_485_id		= 15;	// 485 id
+	int32  module_col		= 16;	// 모듈개수
+	string digit_half_fix_yn= 17;	// 반각 고정여부
+	string display_ty		= 18;	// 전광판 종류  ex) PM12(전광판종류) 01(일반), 02(흐르기)
+	string default_color	= 19;	// 기본색상  ex) PM13(전광판색상) 01(빨강), 02(초록), 03(노랑)
+	int32  full_std			= 20;	// 만차기준  ex) 해당 주차면 이하인 경우 만차로 판단
+	string full_msg			= 21;	// 표시문구  ex)
+	string full_color		= 22;	// 색상    ex)PM13(전광판색상) 01(빨강), 02(초록), 03(노랑)
+	int32  congested_std	= 23;	// 혼잡기준  ex) 해당 주차면 이하인 경우 혼잡으로 판단
+	string congested_msg	= 24;	// 표시문구  ex)
+	string congested_color	= 25;	// 색상    ex)PM13(전광판색상) 01(빨강), 02(초록), 03(노랑)
+	int32  capacious_std	= 26;	// 여유기준  ex) 해당 주차면 이상인 경우 여유로 판단
+	string capacious_msg	= 27;	// 표시문구  ex)
+	string capacious_color	= 28;	// 색상    ex)PM13(전광판색상) 01(빨강), 02(초록), 03(노랑)
+}
+message m1174_guidancevmsset_regist_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	int32 device_index = 11;	// 등록(수정, 삭제) 한 device_index
+}
+
+
+// 스케줄러 관리(조회)
+message m1175_schedulerset_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+	string use_yn = 4;			// 사용여부 (비어있으면 전체)
+}
+message m1176_schedulerset_search_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_schedulerset_l list = 2;	// 리스트
+}
+
+// 스케줄러 관리(설정)
+message m1177_schedulerset_regist_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID 
+	string local_id = 3;		// 로컬ID 
+	string reg_id = 4;			// 등록자ID(로그인 한 사용자ID)
+	string reg_ty = 5;			// 종류 add: 신규, delete: 삭제, change: 수정
+
+	int32 scheduler_id 		 = 11;		// 스케줄러 ID
+	string scheduler_time    = 12;		// 동작 시각
+	string scheduler_type_cd = 13;		// 동작 유형 ex)PM15 01(자동출입 설정), 02(자동출입 해제)
+	string target_device_id  = 14;		// 대상 장비ID (빈칸이면 전체)
+	string use_yn            = 15;		// 사용 여부
+}
+message m1178_schedulerset_regist_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	int32 scheduler_id = 11;	// 등록(수정, 삭제) 한 scheduler_id
+}
+
+// DB 초기화
+message m1181_db_clear_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id    	= 11;	// 초기화 할 주차장ID
+	string local_id 	= 12;	// 초기화 할 로컬ID
+	string park_nm  	= 13;	// 초기화 할 주차장 이름
+	string project_id	= 14;	// 초기화 할 주차장 project id
+	string reg_id 		= 15;	// 등록자ID(로그인 한 사용자ID)
+}
+message m1182_db_clear_res{
+	pb_header_res header = 1;	// 공통부분
+}
+

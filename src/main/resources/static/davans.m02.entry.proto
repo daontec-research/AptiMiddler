@@ -1,0 +1,166 @@
+syntax = "proto3";
+
+package davans;
+import public "davans.common.proto";
+option java_package = "kr.co.daontec.dto.proto";
+//// 입차
+// 입차요청
+message m0201_car_entry_req{
+	pb_header_req header = 1;	// 공통부분
+	string check_ty_cd = 2;		// 입차종류	ex) PP07 01(일반), 02(강제)-중복입차 불허 등 입차 불가 상황에서도 입차 허용
+	string media_ty_cd = 3;		// 입차 매체 종류 ex)PP02 01(LPR), 02(RF), 03(방문허용), 04(수동). 05(방문예약)
+	string media_data = 4;		// 입차 매체 번호
+	string car_no = 5;			// 차량번호
+	string img_path_entry = 7;	// 이미지경로
+	string user_id = 8;			// 장비의 경우 device_id 사용
+	string in_dtm = 9;			// 입차시각(수동입차 시에만)
+	string target_device_id = 10;	// 입차장비(수동입차 시 또는 방문 시(방문증출력, 입차기록 생성)에만)
+	
+	string camera_sn = 11;		// 카메라 고유번호(LPR일 경우만)
+	
+//	string title = 21;				// 제목: 맨 위에 표시할 문구(입차증, 방문증 등)
+	string household_info_1 = 22;	// 방문차량의 경우 방문처 기록을 위해 수정할 수 있음. (정기차량 수정 불가) 동
+	string household_info_2 = 23;	// 방문차량의 경우 방문처 기록을 위해 수정할 수 있음. (정기차량 수정 불가) 호
+	string ho_index = 25;			// 방문차량의 경우 방문처 기록을 위해 수정할 수 있음. (정기차량 수정 불가) 호_index
+	string memo = 24;				// 출입사유(또는 note성 데이터)
+}
+message m0202_car_entry_res{
+	pb_header_res header = 1;	// 공통부분
+	string parking_sn = 2;		// 주차일련번호
+	string car_no = 3;			// 차량번호
+	string cust_cd = 4;			// 고객코드
+	string cust_ty = 5;			// 고객구분(전광판 표시문구)
+}
+
+// 차량번호 변경
+message m0205_car_replace_req{
+	pb_header_req header = 1;	// 공통부분	-- 빈칸인 필드 무시 값이 있는 필드만 업데이트
+	string parking_sn = 2;		// 주차일련번호
+	string car_no = 3;			// 차량번호
+	string img_path_entry = 5;	// 이미지경로
+	string user_id = 6;			// 사용자 ID  D타입은 장비ID
+	
+	string household_info_1 = 11;	// 방문차량의 경우 방문처 기록을 위해 수정할 수 있음. (정기차량 수정 불가)
+	string household_info_2 = 12;	// 방문차량의 경우 방문처 기록을 위해 수정할 수 있음. (정기차량 수정 불가)
+	string ho_index = 14;			// 방문차량의 경우 방문처 기록을 위해 수정할 수 있음. (정기차량 수정 불가)
+	string memo = 13;				// 출입사유(또는 note성 데이터)
+}
+message m0206_car_replace_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+//// 방문차량 입차 --> 입차요청에 media_ty_cd = 'PP0203' 으로 처리 향후 필요하면 추가
+//message m0209_car_entry_visit_req{
+//	pb_header_req header = 1;	// 공통부분
+//}
+//message m0210_car_entry_visit_res{
+//	pb_header_res header = 1;	// 공통부분
+//}
+
+// 자동입차 설정/해제
+message m0211_car_entry_autoset_req{
+	pb_header_req header = 1;	// 공통부분
+	string user_id = 2;			// 사용자ID
+	string target_device_id = 3;	// 설정할 장비ID
+	string auto_entry_yn = 4;	// 자동입차 여부
+}
+message m0212_car_entry_autoset_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+
+// 세대알림 통보 (브로드캐스트 하기 위해 받는 정보)
+message m0221_homenoti_info_req{
+	pb_header_req header = 1;	// 공통부분
+	string state_cd = 2;		// 상태코드(broadcast header용)
+	string state_msg = 3;		// 상태메시지(broadcast header용)
+	string car_no = 4;			// 차량번호
+	string cust_cd = 5;			// 고객코드 ex)PP01
+	string household_info_1 = 6;	// 세대정보1(동)
+	string household_info_2 = 7;	// 세대정보2(호)
+	string ho_index = 9;			// 호_index
+	string event_dtm = 8;		// 전송일시  YYYY-MM-DD hh:mm:ss
+}
+message m0222_homenoti_info_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 입차증(방문증) 발행 요청
+message m0231_visit_receipt_user_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유 ID
+	string local_id = 3;		// 로컬 ID
+	string user_id = 5;
+
+//	string title = 11;			// 제목: 맨 위에 표시할 문구(입차증, 방문증 등)
+//	string cust_nm = 12;		// 고객 명
+	string car_no = 13;			// 차량 번호
+//	string tel_no = 14;			// 전화 번호
+//	string mobile_no = 15;		// 휴대폰 번호
+	string household_info_1 = 16;	// 동
+	string household_info_2 = 17;	// 호
+	string ho_index = 18;			// 호_index
+	
+//	string start_dt = 21; 		// 시작 일자
+//	string end_dt = 22; 		// 종료 일자
+//	string park_able_zone = 23; // 주차가능 구역
+	string memo = 24; 			// 메모	ex)방문사유
+//	string use_yn = 25;			// 사용여부
+
+	string target_device_id = 31;	// 전송할 장비ID 자체 발행일 경우 빈값으로 설정.
+}
+message m0232_visit_receipt_user_res{
+	pb_header_res header = 1;	// 공통부분
+}
+message m0233_visit_receipt_device_req{
+	pb_header_req header = 1;	// 공통부분
+//	string title = 11;			// 제목: 맨 위에 표시할 문구(입차증, 방문증 등)
+//	string cust_nm = 12;		// 고객 명
+	string car_no = 13;			// 차량 번호
+//	string tel_no = 14;			// 전화 번호
+//	string mobile_no = 15;		// 휴대폰 번호
+	string household_info_1 = 16;	// 동
+	string household_info_2 = 17;	// 호
+	string ho_index = 18;			// 호_index
+	
+//	string start_dt = 21; 		// 시작 일자
+//	string end_dt = 22; 		// 종료 일자
+//	string park_able_zone = 23; // 주차가능 구역
+	string memo = 24; 			// 메모
+//	string use_yn = 25;			// 사용여부
+
+	string printer_title = 63;		// 방문증(입차증) 제목 (최상단 큰글씨)
+	string printer_title_size = 64;	// 방문증(입차증) 제목 크기(S: 작은글씨, L: 큰글씨) // 기본값 L
+	string printer_sub_title = 65;	// 방문증(입차증) 부제목 (제목아래 작은글씨)
+	string printer_sub_title_size = 66;	// 방문증(입차증) 부제목 크기(S: 작은글씨, L: 큰글씨) // 기본값 S
+	string printer_notice = 67;		// 방문증(입차증) 안내문구 (정보표시 후 하단 안내문구)
+	string printer_notice_size = 68;// 방문증(입차증) 안내문구 크기(S: 작은글씨, L: 큰글씨) // 기본값 S
+	string printer_footer = 69;		// 방문증(입차증) footer (최하단 표시문구)
+	string printer_footer_size = 70;// 방문증(입차증) footer 크기(S: 작은글씨, L: 큰글씨) // 기본값 S
+
+	string reg_dtm = 31;		// 발급일시
+}
+message m0234_visit_receipt_user_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 직전 방문기록 조회
+message m0235_visit_history_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유 ID
+	string local_id = 3;		// 로컬 ID
+	string user_id = 4;
+	string car_no = 5;			// 차량 번호
+}
+message m0236_visit_history_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	string h_household_info_1 = 2;	// 과거 방문기록 정보1(동)
+	string h_household_info_2 = 3;	// 과거 방문기록 정보2(호)
+	string h_ho_index = 7;			// 과거 방문기록 정보2(호_index)
+	string h_memo = 4;				// 과거 방문기록 출입사유
+	
+	string h_in_dtm = 5;			// 직전 방문입차일시(YYYY-MM-DD hh:mm:ss)
+	string h_out_dtm = 6;			// 직전 방문출차일시(YYYY-MM-DD hh:mm:ss)
+}
+

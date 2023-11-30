@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package davans;
+import public "davans.common.proto";
+option java_package = "kr.co.daontec.dto.proto";
+///리스트 조회
+// 주차장명 리스트
+message m0801_listup_park_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+}
+
+message m0802_listup_park_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_park_l list = 2;	// 리스트
+}
+// 구역명 리스트
+message m0803_listup_zone_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID
+	string local_id = 3;		// 로컬ID
+}
+message m0804_listup_zone_res{
+	pb_header_res header = 1;	// 공통부분
+
+	repeated pb_zone_l list = 2;	// 리스트
+}
+

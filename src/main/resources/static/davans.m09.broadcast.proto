@@ -1,0 +1,182 @@
+syntax = "proto3";
+
+package davans;
+import public "davans.common.proto";
+option java_package = "kr.co.daontec.dto.proto";
+//// 브로드캐스트
+// 장비 상태 정보
+message m0901_b_device_info{
+	pb_header_res header = 1;	// 공통부분
+	string bar_status_cd = 2;	// 차단바상태 ex)PP06
+	string bar_err_msg = 3;		// 바관련 에러메시지
+	string bar_err_chg_yn = 4;	// 바관련 에러 변화여부(Y일 경우만 갱신)
+	string lpr_err_msg = 5;		// LPR관련 에러메시지
+	string lpr_err_chg_yn = 6;	// LPR관련 에러 변화여부(Y일 경우만 갱신)
+	string auto_entry_yn = 7;	// 자동 입차 여부
+	string vms_err_msg = 11;	// 전광판관련 에러메시지
+	string vms_err_chg_yn = 12;	// 전광판관련 에러 변화여부(Y일 경우만 갱신)
+	string rf_err_msg = 13;		// RF리더 에러메시지
+	string rf_err_chg_yn = 14;	// RF리더 에러 변화여부(Y일 경우만 갱신)
+	string device_err_msg = 21;	// 장비 에러메시지
+	string device_err_chg_yn = 22;	// 장비 에러 변화여부(Y일 경우만 갱신)
+}
+
+// 입차 요청
+message m0902_b_car_entry_req{
+	pb_header_res header = 1;	// 공통부분
+	string media_ty_cd = 2;		// 매체코드 ex)PP02
+	string media_data = 3;		// 매체데이터
+	string car_ty_cd = 4;		// 차종코드 ex)PP03
+	string car_no = 5;			// 차량번호
+	string cust_cd = 6;			// 고객코드 ex)PP01
+	string cust_ty = 7;			// 고객구분 string<전광판표시>
+	string img_path_entry = 8;	// 이미지 경로
+	
+	string blacklist_info_1 = 11;	// 블랙리스트 등록한 동
+	string blacklist_info_2 = 12;	// 블랙리스트 등록한 호
+	string blacklist_info_3 = 13;	// 블랙리스트 등록한 호
+	string blacklist_memo = 14;		// 블랙리스트 등록 사유
+	string blacklist_reg_nm = 15;	// 블랙리스트 등록자
+	string blacklist_reg_dtm = 16;	// 블랙리스트 등록 일시
+}
+
+// 입차 완료
+message m0903_b_car_entry_complate{
+	pb_header_res header = 1;	// 공통부분
+	string media_ty_cd = 2;		// 매체코드 ex)PP02
+	string media_data = 3;		// 매체데이터
+	string car_no = 5;			// 차량번호
+	string parking_sn = 6;		// 주차일련번호
+	string cust_cd = 7;			// 고객코드 ex)PP01
+	string cust_ty = 8;			// 고객구분 string<전광판표시>
+	string img_path_entry = 9;	// 이미지 경로
+	
+	string household_info_1 = 10;	// 세대정보1(동)
+	string household_info_2 = 11;	// 세대정보2(호)
+	string ho_index = 13;			// 세대정보3(호_index)
+	
+	// 세대통보를 위한 추가 정보
+	string household_info_suffix_1 = 21;	// 세대정보1 접미사(동)
+	string household_info_suffix_2 = 22;	// 세대정보2 접미사(호)
+	string ho_index_suffix = 24;			// 세대정보3 접미사(호_index)
+	string in_dtm = 23;			// 입차일시  YYYY-MM-DD hh:mm:ss
+	
+	string device_nm = 31;
+	
+	string homenet_notice_yn = 41;	// 세대통보 여부
+	int32 in_cust_reg_id = 42;		// 등록번호(정기권: rgst_id, 방문예약: reserve_id)
+
+}
+
+// 출차 요청
+message m0905_b_car_exit_req{
+	pb_header_res header = 1;	// 공통부분
+//	pb_car_info pay_info = 2;	// 요금정보
+	string parking_sn = 3;		// 주차일련번호
+	string cust_cd = 4;			// 고객구분코드	ex)PP01
+	string cust_ty = 5;			// 고객구분 string<전광판표시>
+	string car_no= 6;			// 차량번호
+	string in_dtm = 7;			// 입차일시  YYYY-MM-DD hh:mm:ss
+	int32 parking_tm = 8;		// 주차시간(분)
+	string in_device_nm = 9;	// 입구 명
+	string out_device_nm = 10;	// 출구 명
+//	string location = 11;		// 주차 위치 구역>층>주차면
+	string img_path_entry = 12;	// 입차 이미지 경로
+	string img_path_exit = 13;	// 출차 이미지 경로	
+}
+
+// 출차 완료
+message m0906_b_car_exit_complate{
+	pb_header_res header = 1;	// 공통부분
+//	pb_car_info pay_info = 2;	// 요금정보
+	string parking_sn = 3;		// 주차일련번호
+	string cust_cd = 4;			// 고객구분코드	ex)PP01
+	string cust_ty = 5;			// 고객구분 string<전광판표시>
+	string car_no= 6;			// 차량번호
+	string in_dtm = 7;			// 입차일시  YYYY-MM-DD hh:mm:ss
+	int32 parking_tm = 8;		// 주차시간(분)
+	string in_device_nm = 9;	// 입구 명
+	string out_device_nm = 10;	// 출구 명
+//	string location = 11;		// 주차 위치 구역>층>주차면
+	string img_path_entry = 12;	// 입차 이미지 경로
+	string img_path_exit = 13;	// 출차 이미지 경로	
+
+	string household_info_1 = 14;	// 세대정보1(동)
+	string household_info_2 = 15;	// 세대정보2(호)
+	string ho_index = 16; 			// 세대정보3(호_index)
+
+	// 세대통보를 위한 추가 정보
+	string household_info_suffix_1 = 21;	// 세대정보1 접미사(동)
+	string household_info_suffix_2 = 22;	// 세대정보2 접미사(호)
+	string ho_index_suffix = 23;			// 세대정보3 접미사(호_index)
+	
+	string out_dtm = 31;		// 출차일시  YYYY-MM-DD hh:mm:ss
+	
+	string homenet_notice_yn = 41;	// 세대통보 여부
+	int32 in_cust_reg_id = 42;		// 등록번호(정기권: rgst_id, 방문예약: reserve_id)	
+	int32 remain_mileage = 52;		// 세대 잔여 마일리지
+	int32 use_mileage = 53;			// 출차 차량 사용 마일리지
+
+}
+
+// 알림 차량
+message m0908_b_alarm_info{
+	pb_header_res header = 1;	// 공통부분
+	string car_no = 2;			// 차량번호
+	string alarm_msg = 3;		// 알림메시지
+	string alarm_file_nm = 4;	// 경보파일 이름
+}
+
+// 주차가능 대수 
+message m0909_b_parkable_cnt{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_parkable_cnt_l list = 2;	// 차량 리스트
+}
+
+// 세대알림 통보 (장비ID로 입, 출구 구분해서 판단)
+message m0910_b_homenoti_info{
+	pb_header_res header = 1;	// 공통부분
+	string car_no = 2;			// 차량번호
+	string cust_cd = 3;			// 고객코드 ex)PP01
+	string household_info_1 = 4;	// 세대정보1(동)
+	string household_info_2 = 5;	// 세대정보2(호)
+	string ho_index = 7;			// 세대정보3(호_index)
+	string event_dtm = 6;		// 전송일시  YYYY-MM-DD hh:mm:ss
+}
+
+// 세대통보 요청(홈넷 중계서버에서 받아서 처리할 데이터 전송)
+// m0911 메시지는 과거 사용 호환성을 위해 남겨놓지만 입차완료, 출차완료의 homenet_notice_yn 필드의 값으로 판단하도록 수정한다.
+// 과거 중계서버 개발 시 사용된 부분은 필요 시 수정하여 처리 또는 java로 변경 개발하도록 한다.
+message m0911_b_homenoti_req{
+	pb_header_res header = 1;	// 공통부분
+	string device_ty_cd = 2;	// 장비 타입 
+	string car_no = 3;			// 차량번호
+	string cust_cd = 4;			// 고객코드 ex)PP01
+	string cust_ty = 5;			// 고객구분 string<전광판표시>
+	string event_dtm = 6;		// 입차일시 또는 출차일시  YYYY-MM-DD hh:mm:ss
+
+	string household_info_1 = 7;	// 세대정보1(동)
+	string household_info_2 = 8;	// 세대정보2(호)
+	string household_info_suffix_1 = 9;		// 세대정보1 접미사(동)
+	string household_info_suffix_2 = 10;	// 세대정보2 접미사(호)
+}
+
+// 입차 데이터 보정(보조 카메라로 찍어서 차량번호 보정할 경우)
+message m0912_b_car_replace{
+	pb_header_res header = 1;	// 공통부분
+
+	string car_no = 5;			// 차량번호
+	string parking_sn = 6;		// 주차일련번호
+	string cust_cd = 7;			// 고객코드 ex)PP01
+	string cust_ty = 8;			// 고객구분 string<전광판표시>
+	string img_path_entry = 9;	// 이미지 경로
+	
+	string household_info_1 = 10;	// 세대정보1(동)
+	string household_info_2 = 11;	// 세대정보2(호)
+	string ho_index = 14;			// 세대정보3(호_index)
+	string household_info_suffix_1 = 12;	// 세대정보1 접미사(동)
+	string household_info_suffix_2 = 13;	// 세대정보2 접미사(호)
+	string ho_index_suffix = 15;			// 세대정보3 접미사(호_index)
+	string in_dtm = 23;			// 입차일시  YYYY-MM-DD hh:mm:ss
+}

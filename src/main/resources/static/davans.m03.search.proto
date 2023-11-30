@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package davans;
+
+import public "davans.common.proto";
+option java_package = "kr.co.daontec.dto.proto";
+//// 조회
+// 차량 정보 조회
+message m0301_car_info_list_req{
+	pb_header_req header = 1;	// 공통부분
+	string start_dt = 3;		// 시작일자(YYYY-MM-DD) 미출차 조회 시 비어있으면 전체
+	string end_dt = 4;			// 종료일자(YYYY-MM-DD)
+	string exists_yn = 5;		// 상태기준 ex)비어있으면 전체, Y: 출차된차량, N: 미출차 차량
+	string cust_cd = 6;			// 고객구분 ex)PP01 비어있으면 전체, 01(일반), 02(정기권), 03(방문)
+	string car_no = 7;			// 차량번호(비어있으면 전체)
+	string household_info_1 = 11;	// 세대정보1(동)
+	string household_info_2 = 12;	// 세대정보2(호)
+	string ho_index = 13;			// 세대정보3(호index)
+	
+	string zone_id = 21;		// 구역ID
+	string in_device_id = 22;	// 입차 장비ID
+	
+	int32 data_cnt = 8;			// 최대 조회 수
+	string search_ty = 2;		// 정렬 기준(in_dtm, out_dtm) 기본 in_dtm
+	string order_by = 9;		// 정렬 순서(asc, desc) 기본 asc
+	
+	string user_id = 71;		// 사용자ID
+}
+message m0302_car_info_list_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_car_detail_l list = 2;	// 차량 리스트
+}
+
+// 차량 리스트
+message m0303_car_list_req{
+	pb_header_req header = 1;	// 공통부분
+	string car_idx = 2;			// 차량번호 뒤4자리
+}
+message m0304_car_list_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_car_l list = 2;	// 차량 리스트
+}
+
+// 주차가능 대수 조회
+message m0313_parkable_cnt_req{
+	pb_header_req header = 1;	// 공통부분
+}
+message m0314_parkable_cnt_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_parkable_cnt_l list = 2;	// 차량 리스트
+}
+
+// 사용가능 등록차량 리스트
+message m0321_usable_regist_list_req{
+	pb_header_req header = 1;	// 공통부분
+	string car_no = 2;			// 차량번호 뒤4자리 or Full number
+	string cust_nm = 3;			// 고객명
+	string household_info_1 = 4;// 정보1
+	string household_info_2 = 5;// 정보2
+	string ho_index = 6;		// 정보3(호index)
+	string user_id = 71;		// 사용자ID
+}
+message m0322_usable_regist_list_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_usable_regist_l list = 2;	// 리스트
+}
+
+// 미처리 차량 조회
+message m0331_car_unprocessed_list_req{
+	pb_header_req header = 1;	// 공통부분
+	string start_dt = 3;		// 시작일자(YYYY-MM-DD) 미출차 조회 시 비어있으면 전체
+	string end_dt = 4;			// 종료일자(YYYY-MM-DD)
+	string cust_cd = 6;			// 고객구분 ex)PP01 비어있으면 전체, 01(일반), 02(정기권), 03(방문)
+	string car_no = 7;			// 차량번호(비어있으면 전체)
+	
+	string zone_id = 21;		// 구역ID
+	string target_device_id = 22;	// 장비ID
+	
+	int32 data_cnt = 8;			// 최대 조회 수
+	string order_by = 9;		// 정렬 순서(asc, desc) 기본 asc
+}
+message m0332_car_unprocessed_list_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_car_unprocessed_l list = 2;	// 미처리 리스트
+}

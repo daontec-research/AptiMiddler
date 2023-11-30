@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package davans;
+import public "davans.common.proto";
+option java_package = "kr.co.daontec.dto.proto";
+//// 출차
+// 수동 출차
+message m0601_car_out_manual_req{
+	pb_header_req header = 1;	// 공통부분
+	string parking_sn = 2;		// 주차일련번호
+	string memo = 3;			// 수동출차사유
+	string user_id = 4;			// 사용자 ID
+}
+message m0602_car_out_manual_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 출차 요청
+message m0603_car_exit_req{
+	pb_header_req header = 1;	// 공통부분
+	string check_ty_cd = 2;		// 출차종류	ex) PP07 01(일반), 02(강제)-입차기록없음 등 출차 불가 상황에서도 허용
+	string media_ty_cd = 3;		// 출차 매체 종류 ex)PP02 01(LPR), 02(RF), 04(수동)
+	string media_data = 4;		// 출차 매체 번호
+	string car_no = 5;			// 차량번호
+	string img_path_exit = 7;	// 이미지경로
+	string user_id = 8;			// 장비의 경우 device_id 사용
+	string target_device_id = 10;	// 출차장비(출차허용 시에만)
+	string memo = 11;			// 출차허용 시 사유
+	
+	string camera_sn = 21;		// 카메라 고유번호(LPR일 경우만)
+}
+message m0604_car_exit_res{
+	pb_header_res header = 1;	// 공통부분
+	string car_no = 3;			// 차량번호
+	string cust_cd = 4;			// 고객코드
+	string cust_ty = 5;			// 고객구분(전광판 표시문구)
+}

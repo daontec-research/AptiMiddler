@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package davans;
+option java_package = "kr.co.daontec.dto.proto";
+import public "davans.enum.proto";
+import public "davans.common.proto";
+import public "davans.m00.base.proto";
+import public "davans.m01.control.proto";
+import public "davans.m02.entry.proto";
+import public "davans.m03.search.proto";
+import public "davans.m06.exit.proto";
+import public "davans.m07.regular.proto";
+import public "davans.m08.listup.proto";
+import public "davans.m09.broadcast.proto";
+import public "davans.m11.setting.proto";
+import public "davans.m12.report.proto";
+
+///////////////// history ////////////////////
+/// 2019/11/04 (ghlee)
+/// 최초작성
+/// dadenda_proto 참조하여 작성
+
+/// 2019/11/21 (ghlee)
+/// m12 보고서 파일 추가
+/// 

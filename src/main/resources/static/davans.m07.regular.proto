@@ -1,0 +1,287 @@
+syntax = "proto3";
+
+package davans;
+import public "davans.common.proto";
+option java_package = "kr.co.daontec.dto.proto";
+/// 등록차량 관리
+// 정기권 정보 조회
+message m0701_rgst_info_list_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유 ID
+	string local_id = 3;		// 로컬 ID
+	string start_dt = 4;		// 시작일자(YYYY-MM-DD) 미출차 조회 시 비어있으면 전체
+	string end_dt = 5;			// 종료일자(YYYY-MM-DD)
+
+	string data_ty = 51;		// 조회 타입(시작일자~종료일자 조회 구분) ex) 비어있으면 전체, start_dt, end_dt, sale_dt(판매일자)
+	string valid_yn = 52;		// 출입가능 여부(조회시점) ex)비어있으면 전체, Y: 사용, N: 사용불가
+
+	string usable_yn = 6;		// 사용가능여부 ex)비어있으면 전체, Y: 사용가능(신규,연장), N: 사용불가(일시정지,해지)
+	string car_no = 7;			// 차량번호(비어있으면 전체)
+	string cust_nm = 8;			// 고객 명(비어있으면 전체)
+	string rf_tag_id = 31;		// RF ID
+	string household_info_1 = 21;	// 세대정보1(동)
+	string household_info_2 = 22;	// 세대정보1(호)
+	string ho_index = 23;			// 세대정보3(호index)
+	int32 data_cnt = 9;			// 최대 조회 수
+	string search_ty = 10;		// 정렬 기준(sale_dt, car_no, cust_nm) 기본 rgst_id
+	string order_by = 11;		// 정렬 순서(asc, desc) 기본 asc
+	
+	string rgst_cust_cd = 41;	// 등록 고객 코드
+	
+	string homenoti_yn = 61;	// 세대통보 여부
+	string car_size = 62;		// 차량 규격 PP03 01(일반), 02(경차), 03(대형)
+	string car_type = 63;		// 챠랑 종류 PP05 01(일반), 02(전기차), 03(테슬라)
+	string disable_yn = 64;		// 장애인 여부
+	
+	string user_id = 71;		// 사용자ID
+}
+message m0702_rgst_info_list_res{
+	pb_header_res header = 1;	// 공통부분
+
+	repeated pb_rgst_l list = 2;	// 
+}
+
+// 정기권 반영  - 타입 별 사용 필드는 별도 명세
+message m0707_rgst_reg_commit_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유 ID
+	string local_id = 3;		// 로컬 ID
+	string reg_ty = 4;			// 종류 add: 신규, delete: 삭제, change: 수정
+	string user_id = 5;
+
+	int32  rgst_id = 6;			// 등록차량 ID
+	string sale_dt = 7;			// 최초 등록 일자
+	string cust_nm = 8;			// 고객 명
+	string car_no = 9;			// 차량 번호
+	string tel_no = 10;			// 전화 번호
+	string mobile_no = 11;		// 휴대폰 번호
+	string car_nm = 12;			// 차량 모델 명
+	string rgst_status_cd = 13;	// 등록 상태 코드	ex) PP01: 01(신규), 02(연장), 03(일시정지), 04(해지)
+	string rgst_cust_cd = 14;	// 등록 고객 코드	ex) PP03: 01(정기차량), 02(직원), ... 가변 코드
+	string rf_tag_id = 15;		// RF 태그 ID
+	string address = 16;		// 주소
+	string household_info_1 = 17;	// 동
+	string household_info_2 = 18;	// 호
+	string ho_index = 19;			// 세대정보3(호index)
+
+	string homenoti_yn = 20;	// 세대통보 여부
+	string start_dt = 21;		// 시작 일자
+	string end_dt = 22; 		// 종료 일자
+	string park_able_zone = 23;	// 주차가능 구역
+	string available_days = 24;	// 사용 가능일 (일월화수목금토공 YYYYYYYY)
+	string memo = 25;			// 메모
+	
+	string car_size = 31;		// 차량 규격 PP03 01(일반), 02(경차), 03(대형)
+	string car_type = 32;		// 챠랑 종류 PP05 01(일반), 02(전기차), 03(테슬라)
+	string disable_yn = 33;		// 장애인 여부
+	
+	string data_migration_yn = 41;	// 데이터 이관 여부(등록 시 타구역 차량으로 등록 된 경우 이관 여부 체크하면 데이터 이관)
+	
+	string no_driving_exception_yn = 51;	// 부제 예외 여부 ex)'Y'인 경우 부제위반 날짜라 하더라도 통과 / default 'N'설정
+
+}
+message m0708_rgst_reg_commit_res{
+	pb_header_res header = 1;	// 공통부분
+	int32 rgst_id = 2;			// 등록차량 ID
+}
+
+// 정기권 이력 조회
+message m0711_rgst_reg_record_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유 ID
+	string local_id = 3;		// 로컬 ID
+	string start_dt = 4;		// 시작일자(YYYY-MM-DD)
+	string end_dt = 5;			// 종료일자(YYYY-MM-DD)
+	string usable_yn = 6;		// 사용가능여부 ex)비어있으면 전체, Y: 사용가능, N: 사용불가
+	string car_no = 7;			// 차량번호(비어있으면 전체)
+	string cust_nm = 8;			// 고객 명(비어있으면 전체)
+	string household_info_1 = 21;	// 세대정보1(동)
+	string household_info_2 = 22;	// 세대정보1(호)
+	string ho_index = 23;			// 세대정보3(호index)
+	int32 data_cnt = 9;			// 최대 조회 수
+	string search_ty = 10;		// 정렬 기준(sale_dt, car_no, cust_nm) 기본 reg_dtm
+	string order_by = 11;		// 정렬 순서(asc, desc) 기본 asc
+}
+message m0712_rgst_reg_record_res{
+	pb_header_res header = 1;	// 공통부분
+
+	repeated pb_rgst_record list = 2;	// 
+}
+
+
+// 방문 예약 관리(조회)
+message m0721_visit_reserve_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+	string start_dt = 4;		// 시작일자(YYYY-MM-DD) 미출차 조회 시 비어있으면 전체
+	string end_dt = 5;			// 종료일자(YYYY-MM-DD)
+
+	string data_ty = 51;		// 조회 타입(시작일자~종료일자 조회 구분) ex) 비어있으면 전체, start_dt, end_dt, reg_dt(등록일자)
+	string valid_yn = 52;		// 출입가능 여부(조회시점) ex)비어있으면 전체, Y: 사용, N: 사용불가
+
+	string usable_yn = 6;		// 사용가능여부 ex)비어있으면 전체, Y: 사용가능, N: 사용불가
+	string car_no = 7;			// 차량번호(비어있으면 전체)
+	string cust_nm = 8;			// 고객 명(비어있으면 전체)
+	string household_info_1 = 21;	// 세대정보1(동)
+	string household_info_2 = 22;	// 세대정보1(호)
+	string ho_index = 23;			// 세대정보3(호index)
+	int32 data_cnt = 9;			// 최대 조회 수
+	string search_ty = 10;		// 정렬 기준(car_no, cust_nm) 기본 reserve_id
+	string order_by = 11;		// 정렬 순서(asc, desc) 기본 asc
+
+	string car_size = 62;		// 차량 규격 PP03 01(일반), 02(경차), 03(대형)
+	string car_type = 63;		// 챠랑 종류 PP05 01(일반), 02(전기차), 03(테슬라)
+	string disable_yn = 64;		// 장애인 여부
+	
+	string user_id = 71;		// 사용자ID
+	
+	string reserve_status = 81;			// 예약 상태 ex) R: 예약중, P: 주차중, Y: 정상사용(출차완료), N: 미사용(미사용 상태로 날짜 지남) / R상태 일 때만 취소 가능일
+	string deposit_basic_tm = 82;		// 마일리지 사용 시 선차감 시간(기본 제공 분) 미사용 시 빈칸을 사용하기 위해 string으로 지정
+	string deposit_basic_tm_lookup = 83;// deposit_basic_tm 설정값 이상, 이하 ex) above = 이상, below = 이하
+	string deposit_extra_tm	= 84;		// 마일리지 사용 시 선차감 시간(추가 구매 분) 미사용 시 빈칸을 사용하기 위해 string으로 지정
+	string deposit_extra_tm_lookup = 85;// deposit_extra_tm 설정값 이상, 이하 ex) above = 이상, below = 이하
+	string real_use_web_tm = 86;		// 실 사용 마일리지 미사용 시 빈칸을 사용하기 위해 string으로 지정
+	string real_use_web_tm_lookup = 87;	// real_use_web_tm 설정값 이상, 이하 ex) above = 이상, below = 이하
+
+}
+message m0722_visit_reserve_search_res{
+	pb_header_res header = 1;	// 공통부분
+
+	repeated pb_visitreserve_l list = 2;	//
+}
+
+// 방문 예약 관리(설정)
+message m0723_visit_reserve_regist_req{
+	pb_header_req header = 1;	// 공통부분
+
+	string park_id = 2;			// 고유 ID
+	string local_id = 3;		// 로컬 ID
+	string reg_ty = 4;			// 종류 add: 신규, delete: 삭제, change: 수정
+	string user_id = 5;
+
+	int32  reserve_id = 11;		// 예약 ID
+	string cust_nm = 12;			// 고객 명
+	string car_no = 13;			// 차량 번호
+	string tel_no = 14;			// 전화 번호
+	string mobile_no = 15;		// 휴대폰 번호
+	string household_info_1 = 16;	// 동
+	string household_info_2 = 17;	// 호
+	string ho_index = 18;			// 세대정보3(호index)
+	
+	string start_dt = 21; 		// 시작 일자
+	string end_dt = 22; 		// 종료 일자
+	string park_able_zone = 23; // 주차가능 구역
+	string memo = 24; 			// 메모
+	string use_yn = 25;			// 사용여부	사용여부 필드 사용하지 않고 미사용 시 삭제하도록 함.
+	
+	string car_size = 31;		// 차량 규격 PP03 01(일반), 02(경차), 03(대형)
+	string car_type = 32;		// 챠랑 종류 PP05 01(일반), 02(전기차), 03(테슬라)
+	string disable_yn = 33;		// 장애인 여부
+
+	string data_migration_yn = 41;	// 데이터 이관 여부(등록 시 타구역 차량으로 등록 된 경우 이관 여부 체크하면 데이터 이관)
+	
+}
+message m0724_visit_reserve_regist_res{
+	pb_header_res header = 1;	// 공통부분
+	int32 reserve_id = 2;		// 예약 ID
+}
+
+// 방문 예약 이력
+message m0725_visit_reserve_record_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+	string start_dt = 4;		// 시작일자(YYYY-MM-DD)
+	string end_dt = 5;			// 종료일자(YYYY-MM-DD)
+	string use_yn = 6;			// 사용여부 ex)비어있으면 전체, Y: 사용가능, N: 사용불가
+	string car_no = 7;			// 차량번호(비어있으면 전체)
+	string cust_nm = 8;			// 고객 명(비어있으면 전체)
+	string household_info_1 = 21;	// 세대정보1(동)
+	string household_info_2 = 22;	// 세대정보1(호)
+	string ho_index = 23;			// 세대정보3(호index)
+	int32 data_cnt = 9;			// 최대 조회 수
+	string search_ty = 10;		// 정렬 기준(car_no, cust_nm) 기본 reg_dtm
+	string order_by = 11;		// 정렬 순서(asc, desc) 기본 asc
+}
+message m0726_visit_reserve_record_res{
+	pb_header_res header = 1;	// 공통부분
+
+	repeated pb_visitreserve_record list = 2;	//
+}
+
+// RF 태그 리스트
+message m0731_rgst_rf_list_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+	int32  rgst_id = 4;			// 등록차량 ID(비어있으면 전체)
+	
+	string rf_tag_id = 11;		// RF 태그 ID(비어있으면 전체)
+	string tag_serial_no = 12;	// 태그 원번호(비어있으면 전체)
+	string tag_state_cd = 13;	// 태그 상태 코드 ex)비어있으면 전체, PR02 01(미등록), 02(정상등록), 03(분실), 04(폐기)
+}
+message m0732_rgst_rf_list_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_rgst_rf_l list = 2;	// rf 리스트
+}
+
+// RF 태그 등록
+message m0733_rgst_rf_commit_req{
+	pb_header_req header = 1;	// 공통부분
+
+	string park_id = 2;			// 고유 ID
+	string local_id = 3;		// 로컬 ID
+	string reg_ty = 4;			// 종류 add: 신규, delete: 삭제, change: 수정
+	string user_id = 5;
+
+	string rf_tag_id = 11;		// RF 태그 ID
+	string tag_serial_no = 12;	// 태그 원번호
+	string tag_state_cd = 13;	// 태그 상태 코드 ex) PR02 01(미등록), 02(정상등록), 03(분실), 04(폐기)
+	string memo = 14;			// 메모
+}
+message m0734_rgst_rf_commit_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 공무(공용)차량 관리(조회)
+message m0741_official_search_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID (비어있으면 전체)
+	string local_id = 3;		// 로컬ID (비어있으면 전체)
+	int32  official_id = 4;		// 공무차량 ID(비어있으면 전체)
+	
+//	string rgst_area = 11;		// 등록지역(비어있으면 전체)
+//	string model_symbol = 12;	// 차종기호(비어있으면 전체)
+//	string use_symbol = 13;		// 용도기호(비어있으면 전체)
+//	string car_index = 14;		// 일련번호(비어있으면 전체)
+//	string official_yn = 15;	// 공무여부(경찰, 소방 등)
+	string use_yn = 16;			// 사용여부
+}
+message m0742_official_search_res{
+	pb_header_res header = 1;	// 공통부분
+	
+	repeated pb_official_l list = 2;	// 리스트
+}
+// 공무(공용)차량 관리(설정)
+message m0743_official_regist_req{
+	pb_header_req header = 1;	// 공통부분
+	string park_id = 2;			// 고유ID
+	string local_id = 3;		// 로컬ID
+	string reg_ty = 4;			// 종류 add: 신규, delete: 삭제, change: 수정
+	string user_id = 5;
+
+	int32  official_id = 11;	// 공무차량 ID
+	string rgst_area = 12;		// 등록지역
+	string model_symbol = 13;	// 차종기호
+	string use_symbol = 14;		// 용도기호
+	string car_index = 15;		// 일련번호
+	string memo = 16;			// 메모
+//	string official_yn = 17;	// 공무여부(경찰, 소방 등)
+	string use_yn = 18;			// 사용여부
+}
+message m0744_official_regist_res{
+	pb_header_res header = 1;	// 공통부분
+	int32  official_id = 2;	// 공무차량 ID
+}

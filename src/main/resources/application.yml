@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://rnd.daontec.co.kr:1933;databaseName=DAVANS_DL_창욱백업;encrypt=false
+#    url: ENC(nM3ZeW3kz7j0paaJJnF4rC4jmncNefiPEk69Jgl6nR5Lqgny9yGzz433V8VC+MQWNuMat/pZfvv1HnOJSCt4AZj6P/U/KdfATccO2MwT+bhb4Y7qGNNRTNvoKyNu5EcTv7GBZ0i1hYR3+tzymgHnRItcyIalWCcy7VBS4fF4rUL1NNk2tE3N0SguFvH8T+Ol)
+    username: daontec
+    password: $daondb3030!@
+
+server:
+  port: 8080
+
+davans:
+  port: 9801
+  host: "192.168.0.158"
+  size: 256
+#  host: "localhost"
+
+pgi:
+  port: 5001
+  host: "rnd.daontec.co.kr"
+
+daontec:
+  logname: log
+
+apti:
+  url: "http://34.64.240.208:8080"
+  key: "aaaa"
+  code: "bbbb"
+  clientid: "betatestapti&%$"
+
+
+
+

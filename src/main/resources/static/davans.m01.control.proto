@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package davans;
+import public "davans.common.proto";
+option java_package = "kr.co.daontec.dto.proto";
+/// 제어
+// 차단기 강제 열림 통보
+message m0101_gate_opened_req{
+	pb_header_req header = 1;	// 공통부분
+}
+message m0102_gate_opened_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 차단기 제어 요청
+message m0103_gate_control_user_req{
+	pb_header_req header = 1;	// 공통부분
+	string bar_status_cd = 2;	// 바상태코드	ex) PS01(차단기상태) 01: 열림, 02: 닫힘, 06: 열린채 잠금, 07: 닫힌채 잠김, 08: 잠금 해제
+	string user_id = 3;			// 사용자 ID
+	string target_device_id = 4;	// 제어 장비 ID (전체는 all)
+	string complete_yn = 5;		// 입차(출차) 허용 후 차단기 제어 여부(Y인 경우 허용 후 차단기 제어 상태임) M인경우는 수동스위치와 동일하게 처리함.
+	string car_no = 6;			// 차량번호
+}
+message m0104_gate_control_user_res{
+	pb_header_res header = 1;	// 공통부분
+}
+message m0105_gate_control_device_req{
+	pb_header_req header = 1;	// 공통부분
+	string bar_status_cd = 2;	// 바상태코드	ex) PS01(차단기상태) 01: 열림, 02: 닫힘, 06: 열린채 잠금, 07: 닫힌채 잠김, 08: 잠금 해제
+	string complete_yn = 5;		// 입차(출차) 허용 후 차단기 제어 여부(Y인 경우 허용 후 차단기 제어 상태임)
+//	string car_no = 6;			// 차량번호 -> 삭제
+}
+message m0106_gate_control_device_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 전광판 문구 조정(장비 설정에서 문구 변경 시 장비로 내려줌)
+// 장비 설정 시 별도의 동작없이 서버에서 해당 장비로 전송
+message m0107_vms_msg_device_req{
+	pb_header_req header = 1;	// 공통부분
+	string vms_upper_msg = 2;	// 상단 메시지
+	string vms_lower_msg = 3;	// 하단 메시지
+	string vms_complete_msg = 4; // 완료 메시지
+}
+message m0108_vms_msg_device_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 원격 전원 제어 요청
+message m0111_power_control_user_req{
+	pb_header_req header = 1;	// 공통부분
+	string poc_status_cd = 2;	// 전원제어기 상태코드	ex) PP06 01(켜기), 02(끄기), 03(껏다켜기)
+	string user_id = 3;			// 사용자 ID
+	string target_device_id = 4;	// 제어 장비 ID
+//	string controller_ip = 5;	// 제어기 IP
+	string controller_ch = 6;	// 제어 채널
+}
+message m0112_power_control_user_res{
+	pb_header_res header = 1;	// 공통부분
+}
+message m0113_power_control_device_req{
+	pb_header_req header = 1;	// 공통부분
+	string poc_status_cd = 2;	// 전원제어기 상태코드	ex) PP06 01(켜기), 02(끄기), 03(껏다켜기)
+//	string controller_ip = 5;	// 제어기 IP
+	string controller_ch = 6;	// 제어 채널
+}
+message m0114_power_control_device_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
+// 차단기 제어 요청(홈넷 요청)
+message m0121_gate_control_si_req{
+	pb_header_req header = 1;	// 공통부분
+	string bar_status_cd = 2;	// 바상태코드	ex) PS01(차단기상태) 01: 열림, 02: 닫힘, 06: 열린채 잠금, 07: 닫힌채 잠김, 08: 잠금 해제
+	string household_info_1 = 3;
+	string household_info_2 = 4;
+	string ho_index = 5;
+	string lobby_id = 6;
+}
+message m0122_gate_control_si_res{
+	pb_header_res header = 1;	// 공통부분
+}
+
