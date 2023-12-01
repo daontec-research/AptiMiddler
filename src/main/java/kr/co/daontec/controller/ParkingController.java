@@ -1,5 +1,6 @@
 package kr.co.daontec.controller;
 
+import jakarta.validation.Valid;
 import kr.co.daontec.dto.Parameters;
 import kr.co.daontec.service.ParkingService;
 import lombok.RequiredArgsConstructor;
@@ -16,41 +17,41 @@ public class ParkingController {
 
     @PostMapping("/car")
     public ResponseEntity<?> registerCar(
-            @RequestHeader Map<String,String> header,
-            @RequestBody Parameters.RegisterCar registerCar
-    ){
+            @RequestHeader Map<String, String> header,
+            @Valid @RequestBody Parameters.RegisterCar registerCar
+    ) {
         return service.registerCar(registerCar);
     }
 
     @PostMapping("/reservationlist")
     public ResponseEntity<?> reservationList(
-            @RequestHeader Map<String,String> header,
-            @RequestBody Parameters.ReservationList reservationList
-    ){
+            @RequestHeader Map<String, String> header,
+            @Valid @RequestBody Parameters.ReservationList reservationList
+    ) {
         return service.reservationList(reservationList);
     }
 
     @PostMapping("/reservation")
     public ResponseEntity<?> reservation(
-            @RequestHeader Map<String,String> header,
-            @RequestBody Parameters.Reservation reservation
-    ){
+            @RequestHeader Map<String, String> header,
+            @Valid @RequestBody Parameters.Reservation reservation
+    ) {
         return service.reservation(reservation);
     }
 
     @PostMapping("/delreservation")
     public ResponseEntity<?> delReservation(
-            @RequestHeader Map<String,String> header,
-            @RequestBody Parameters.DelReservation delReservation
-    ){
+            @RequestHeader Map<String, String> header,
+            @Valid @RequestBody Parameters.DelReservation delReservation
+    ) {
         return service.delReservation(delReservation);
     }
 
     @PostMapping("/inout")
     public ResponseEntity<?> inOut(
-            @RequestHeader Map<String,String> header,
-            @RequestBody Parameters.Inout inout
-    ){
+            @RequestHeader Map<String, String> header,
+            @Valid @RequestBody Parameters.Inout inout
+    ) {
         return service.inOut(inout);
     }
 

@@ -48,6 +48,7 @@ public class DavansClient extends Thread{
 
             ChannelFuture f = b.connect(data.getHost(), data.getPort()).sync();
             f.channel().closeFuture().sync();
+            log.info("다반스 브로드캐스트서버 Connect");
         } finally {
             group.shutdownGracefully();
         }

@@ -110,11 +110,11 @@ public class DavansClientHandler extends ChannelInboundHandlerAdapter {
 
     private boolean flushBuffer() {
         if (buf.isReadable()) {
-            log.info("남은버퍼:{}", buf.readableBytes());
+//            log.info("남은버퍼:{}", buf.readableBytes());
             return true;
         }
         buf.clear();
-        log.info("남은버퍼:{}", buf.readableBytes());
+//        log.info("남은버퍼:{}", buf.readableBytes());
         return false;
     }
 

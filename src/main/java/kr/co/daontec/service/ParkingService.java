@@ -1,8 +1,10 @@
 package kr.co.daontec.service;
 
 import kr.co.daontec.dto.AptiResponse;
+import kr.co.daontec.dto.BaseResponse;
 import kr.co.daontec.dto.Parameters;
 import kr.co.daontec.dto.ResDtos;
+import kr.co.daontec.exception.AptiException;
 import kr.co.daontec.repository.SPCall;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +61,7 @@ public class ParkingService {
                 spCall.reservation(reservation);
 
         if (result.isEmpty()) {
-            return AptiResponse.pagingErrRes(400,"400", "잘못된값입니다.", null);
+            throw new AptiException("400", "잘못된값입니다");
         }
 
         return ResponseEntity.status(200).body(result.get());
@@ -70,10 +72,10 @@ public class ParkingService {
                 spCall.delReservation(delReservation);
 
         if (result.isEmpty()) {
-            return AptiResponse.pagingErrRes(400,"400", "잘못된값입니다.", null);
+            throw new AptiException("400", "잘못된값입니다");
         }
 
-        return AptiResponse.reservationDeleteRes(result.get());
+        return BaseResponse.baseRes(result.get());
     }
 
     public ResponseEntity<?> inOut(Parameters.Inout inout) {

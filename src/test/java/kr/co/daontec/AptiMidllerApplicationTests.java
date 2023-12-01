@@ -1,5 +1,6 @@
 package kr.co.daontec;
 
+import kr.co.daontec.dto.AptiResponse;
 import kr.co.daontec.dto.Parameters;
 import kr.co.daontec.repository.SPCall;
 import org.junit.jupiter.api.Test;

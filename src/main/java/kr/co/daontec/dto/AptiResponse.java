@@ -1,14 +1,12 @@
 package kr.co.daontec.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 
 
 
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Component;
 @ToString
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class AptiResponse {
-
     private String resultCd;
     private String resultMsg;
     private Integer pageNumber;
@@ -47,29 +44,4 @@ public class AptiResponse {
                         .build()
         );
     }
-
-    public static ResponseEntity<?> reservationDeleteRes(AptiResponse result){
-        return ResponseEntity.status(200).body(
-                AptiResponse.builder()
-                        .resultCd(result.getResultCd())
-                        .resultMsg(result.getResultMsg())
-                        .build()
-        );
-    }
-
-    public static ResponseEntity<?> pagingErrRes(
-            int status,
-            String resultCd,
-            String resultMsg,
-            Object list
-    ) {
-        return ResponseEntity.status(status).body(
-                AptiResponse.builder()
-                        .resultCd(resultCd)
-                        .resultMsg(resultMsg)
-                        .list(list)
-                        .build()
-        );
-    }
-
 }

@@ -23,10 +23,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -50,18 +48,11 @@ public class RequestApti {
 
     @Async
     public void carIn(DavansM09Broadcast.m0903_b_car_entry_complate m903, String deviceId) throws IOException {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("carNoInformation", m903.getCarNo());
-        map.add("aptCode", data.getAptiCode());
-        map.add("carInDate", m903.getInDtm().split(" ")[0]);
-        map.add("carInTime", m903.getInDtm().split(" ")[1]);
-        map.add("deviceCode", m903.getDeviceNm());
-        map.add("reservationVisitCarId", String.valueOf(m903.getInCustRegId()));
 
         CarInOutRes carInOutRes = webClient.post()
                 .uri("/api/car/in2")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(BodyInserters.fromFormData(map))
+                .body(BodyInserters.fromFormData(carInBodyMap(m903)))
                 .retrieve()
                 .bodyToMono(CarInOutRes.class)
                 .timeout(Duration.ofSeconds(10))
@@ -79,17 +70,11 @@ public class RequestApti {
 
     @Async
     public void carOut(DavansM09Broadcast.m0906_b_car_exit_complate m906, String deviceId) throws IOException {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("carNoInformation", m906.getCarNo());
-        map.add("aptCode", data.getAptiCode());
-        map.add("carOutDate", m906.getOutDtm().split(" ")[0]);
-        map.add("carOutTime", m906.getOutDtm().split(" ")[1]);
-        map.add("deviceCode", m906.getOutDeviceNm());
 
         CarInOutRes carInOutRes = webClient.post()
                 .uri("/api/car/out2")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(BodyInserters.fromFormData(map))
+                .body(BodyInserters.fromFormData(carOutBodyMap(m906)))
                 .retrieve()
                 .bodyToMono(CarInOutRes.class)
                 .timeout(Duration.ofSeconds(10))
@@ -107,31 +92,12 @@ public class RequestApti {
         }
     }
 
-    public void loadImage(String url) throws IOException {
-        /*String fileName = Arrays.stream(url.split("/"))
-                .reduce((first, second) -> second)
-                .orElse("");*/
-
-        String[] list = url.split("/");
-        String fileName = list[list.length - 1];
-
-        byte[] imageBytes = downloadImage(url);
-        String imageString = new String(imageBytes, StandardCharsets.UTF_8);
-
-        sendImage(fileName, imageString);
-    }
-
     public void sendImage(String fileName, String binary) {
-
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("fileName", fileName);
-        map.add("file", binary);
-        map.add("aptCode", data.getAptiCode());
 
         Object object = webClient.post()
                 .uri("/api/car/image")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
-                .body(BodyInserters.fromFormData(map))
+                .body(BodyInserters.fromFormData(sendImageBodyMap(fileName, binary)))
                 .retrieve()
                 .bodyToMono(Object.class)
                 .timeout(Duration.ofSeconds(10))
@@ -144,6 +110,52 @@ public class RequestApti {
 
         Map<String, String> resMap = (Map<String, String>) object;
         log.info("아파트아이 차번이미지전송결과 : {}", resMap.get("message"));
+    }
+
+    private MultiValueMap<String, String> carInBodyMap(DavansM09Broadcast.m0903_b_car_entry_complate m903) {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("carNoInformation", m903.getCarNo());
+        map.add("aptCode", data.getAptiCode());
+        map.add("carInDate", m903.getInDtm().split(" ")[0]);
+        map.add("carInTime", m903.getInDtm().split(" ")[1]);
+        map.add("deviceCode", m903.getDeviceNm());
+        map.add("reservationVisitCarId", String.valueOf(m903.getInCustRegId()));
+
+        return map;
+    }
+
+    private MultiValueMap<String, String> carOutBodyMap(DavansM09Broadcast.m0906_b_car_exit_complate m906) {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("carNoInformation", m906.getCarNo());
+        map.add("aptCode", data.getAptiCode());
+        map.add("carOutDate", m906.getOutDtm().split(" ")[0]);
+        map.add("carOutTime", m906.getOutDtm().split(" ")[1]);
+        map.add("deviceCode", m906.getOutDeviceNm());
+
+        return map;
+    }
+
+    private MultiValueMap<String, String> sendImageBodyMap(String fileName, String binary) {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("fileName", fileName);
+        map.add("file", binary);
+        map.add("aptCode", data.getAptiCode());
+
+        return map;
+    }
+
+    private void loadImage(String url) throws IOException {
+        /*String fileName = Arrays.stream(url.split("/"))
+                .reduce((first, second) -> second)
+                .orElse("");*/
+
+        String[] list = url.split("/");
+        String fileName = list[list.length - 1];
+
+        byte[] imageBytes = downloadImage(url);
+        String imageString = new String(imageBytes, StandardCharsets.UTF_8);
+
+        sendImage(fileName, imageString);
     }
 
     private static byte[] downloadImage(String imageUrl) throws IOException {
