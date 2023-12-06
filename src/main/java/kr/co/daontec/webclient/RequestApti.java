@@ -60,7 +60,6 @@ public class RequestApti {
                     log.error(e.getResponseBodyAsString());
                     return Mono.empty();
                 })
-                .retry(3)
                 .block();
 
         log.info("아파트아이 입차전송결과 : {}", Objects.requireNonNull(carInOutRes).getMessage());
@@ -82,7 +81,6 @@ public class RequestApti {
                     log.error(e.getResponseBodyAsString());
                     return Mono.empty();
                 })
-                .retry(3)
                 .block();
 
         log.info("아파트아이 출차전송결과 : {}", Objects.requireNonNull(carInOutRes).getMessage());
@@ -105,7 +103,6 @@ public class RequestApti {
                     log.error(e.getResponseBodyAsString());
                     return Mono.empty();
                 })
-                .retry(3)
                 .block();
 
         Map<String, String> resMap = (Map<String, String>) object;
