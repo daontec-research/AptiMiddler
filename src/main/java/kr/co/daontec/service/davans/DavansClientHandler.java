@@ -137,7 +137,7 @@ public class DavansClientHandler extends ChannelInboundHandlerAdapter {
             DavansM09Broadcast.m0906_b_car_exit_complate m906 = DavansM09Broadcast.m0906_b_car_exit_complate.parseFrom(body);
             if (m906.getCustCd().equals("PP0102") || m906.getCustCd().equals("PP0103")) {
                 log.info("장비번호 : {}, 출차차량번호 : {}", deviceId, m906.getCarNo());
-//                requestApti.carOut(m906,deviceId);
+                requestApti.carInOut(m906,deviceId,"out");
             }
         } catch (Exception e) {
             log.error("ProtoBuf 파싱오류 : {}", e.getMessage());
@@ -150,7 +150,7 @@ public class DavansClientHandler extends ChannelInboundHandlerAdapter {
             DavansM09Broadcast.m0903_b_car_entry_complate m903 = DavansM09Broadcast.m0903_b_car_entry_complate.parseFrom(body);
             if (m903.getCustCd().equals("PP0102") || m903.getCustCd().equals("PP0103")) {
                 log.info("장비번호 : {}, 입차차량번호 : {}", deviceId, m903.getCarNo());
-//                requestApti.carIn(m903,deviceId);
+                requestApti.carInOut(m903,deviceId,"in");
             }
         } catch (Exception e) {
             log.error("ProtoBuf 파싱오류 : {}", e.getMessage());

@@ -2,6 +2,7 @@ package kr.co.daontec.webclient;
 
 import jakarta.annotation.PostConstruct;
 import kr.co.daontec.config.ConfigData;
+import kr.co.daontec.dto.aptireq.EventInOut;
 import kr.co.daontec.dto.aptiresponse.CarInOutRes;
 import kr.co.daontec.dto.proto.DavansM09Broadcast;
 import kr.co.daontec.service.davans.DavansHostConnect;
@@ -42,17 +43,16 @@ public class RequestApti {
     public void init() {
         this.webClient = WebClient.builder()
                 .baseUrl(data.getAptiUrl())
-                .defaultHeader("apiKey", data.getAptiKey())
+//                .defaultHeader("apiKey", data.getAptiKey())
                 .build();
     }
 
     @Async
-    public void carIn(DavansM09Broadcast.m0903_b_car_entry_complate m903, String deviceId) throws IOException {
+    public void carInOut(DavansM09Broadcast.m0903_b_car_entry_complate m903, String deviceId, String inout) throws IOException {
 
         CarInOutRes carInOutRes = webClient.post()
-                .uri("/api/car/in2")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(BodyInserters.fromFormData(carInBodyMap(m903)))
+                .uri("/api/v1/parking/event/inout")
+                .bodyValue(EventInOut.convertEventInOutDto(m903,inout))
                 .retrieve()
                 .bodyToMono(CarInOutRes.class)
                 .timeout(Duration.ofSeconds(10))
@@ -62,18 +62,17 @@ public class RequestApti {
                 })
                 .block();
 
-        log.info("아파트아이 입차전송결과 : {}", Objects.requireNonNull(carInOutRes).getMessage());
-        davansHostConnect.sendData(m903, carInOutRes.getResultCode().equals("00"), deviceId);
-        loadImage(m903.getImgPathEntry());
+        log.info("아파트아이 입차전송결과 : {}", Objects.requireNonNull(carInOutRes).getResult_msg());
+        davansHostConnect.sendData(m903, carInOutRes.getResult_cd().equals("00"), deviceId);
+
     }
 
     @Async
-    public void carOut(DavansM09Broadcast.m0906_b_car_exit_complate m906, String deviceId) throws IOException {
+    public void carInOut(DavansM09Broadcast.m0906_b_car_exit_complate m906, String deviceId, String inout) throws IOException {
 
         CarInOutRes carInOutRes = webClient.post()
-                .uri("/api/car/out2")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(BodyInserters.fromFormData(carOutBodyMap(m906)))
+                .uri("/api/v1/parking/event/inout")
+                .bodyValue(EventInOut.convertEventInOutDto(m906,inout))
                 .retrieve()
                 .bodyToMono(CarInOutRes.class)
                 .timeout(Duration.ofSeconds(10))
@@ -83,14 +82,12 @@ public class RequestApti {
                 })
                 .block();
 
-        log.info("아파트아이 출차전송결과 : {}", Objects.requireNonNull(carInOutRes).getMessage());
-        davansHostConnect.sendData(m906, carInOutRes.getResultCode().equals("00"), deviceId);
-        if (!m906.getImgPathExit().equals("")) {
-            loadImage(m906.getImgPathExit());
-        }
-    }
+        log.info("아파트아이 출차전송결과 : {}", Objects.requireNonNull(carInOutRes).getResult_msg());
+        davansHostConnect.sendData(m906, carInOutRes.getResult_cd().equals("00"), deviceId);
 
-    public void sendImage(String fileName, String binary) {
+    }
+}
+    /*public void sendImage(String fileName, String binary) {
 
         Object object = webClient.post()
                 .uri("/api/car/image")
@@ -107,9 +104,9 @@ public class RequestApti {
 
         Map<String, String> resMap = (Map<String, String>) object;
         log.info("아파트아이 차번이미지전송결과 : {}", resMap.get("message"));
-    }
+    }*/
 
-    private MultiValueMap<String, String> carInBodyMap(DavansM09Broadcast.m0903_b_car_entry_complate m903) {
+    /*private MultiValueMap<String, String> carInBodyMap(DavansM09Broadcast.m0903_b_car_entry_complate m903) {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("carNoInformation", m903.getCarNo());
         map.add("aptCode", data.getAptiCode());
@@ -122,7 +119,7 @@ public class RequestApti {
     }
 
     private MultiValueMap<String, String> carOutBodyMap(DavansM09Broadcast.m0906_b_car_exit_complate m906) {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> map  = new LinkedMultiValueMap<>();
         map.add("carNoInformation", m906.getCarNo());
         map.add("aptCode", data.getAptiCode());
         map.add("carOutDate", m906.getOutDtm().split(" ")[0]);
@@ -142,9 +139,9 @@ public class RequestApti {
     }
 
     private void loadImage(String url) throws IOException {
-        /*String fileName = Arrays.stream(url.split("/"))
-                .reduce((first, second) -> second)
-                .orElse("");*/
+        //String fileName = Arrays.stream(url.split("/"))
+        //        .reduce((first, second) -> second)
+        //        .orElse("");
 
         String[] list = url.split("/");
         String fileName = list[list.length - 1];
@@ -171,5 +168,4 @@ public class RequestApti {
 
             return imageBytes;
         }
-    }
-}
+    }*/

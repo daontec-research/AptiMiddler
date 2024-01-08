@@ -10,8 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarInOutRes {
-    private String resultCode;
-    private String message;
-    private String fileName;
-    private Long carInOutHistoryId;
+    private String result_cd;
+    private String result_msg;
 }

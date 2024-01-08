@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import kr.co.daontec.dto.Parameters;
 import kr.co.daontec.service.ParkingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
